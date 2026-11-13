@@ -1,0 +1,136 @@
+import { Menu, X } from 'lucide-react';
+import { useState } from 'react';
+import { PageId, PROFILE } from '../data/portfolioData';
+
+interface NavbarProps {
+  currentPage: PageId;
+  onNavigate: (page: PageId) => void;
+}
+
+const NAV_ITEMS: { id: PageId; label: string }[] = [
+  { id: 'home', label: 'Home' },
+  { id: 'about', label: 'About' },
+  { id: 'projects', label: 'Projects' },
+  { id: 'planner', label: 'Planner' },
+  { id: 'contact', label: 'Contact' },
+];
+
+export function Navbar({ currentPage, onNavigate }: NavbarProps) {
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [logoError, setLogoError] = useState(false);
+
+  const handleSelect = (page: PageId) => {
+    onNavigate(page);
+    setMobileOpen(false);
+  };
+
+  return (
+    <header className="sticky top-0 z-40 bg-[#0B2D4F]/98 backdrop-blur-xs text-white border-b border-white/10">
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 md:gap-8 px-4 sm:px-6 py-4">
+        {/* Zone 1: Brand wordmark + MIVA institutional mark */}
+        <button
+          type="button"
+          onClick={() => handleSelect('home')}
+          className="flex min-w-0 items-center gap-2.5 sm:gap-3 font-display text-sm sm:text-lg font-bold tracking-tight text-white whitespace-nowrap shrink-0 max-w-[calc(100%-96px)] md:max-w-none text-left cursor-pointer focus-visible:outline-2 focus-visible:outline-[#E63C36] focus-visible:outline-offset-4 rounded"
+        >
+          {!logoError && (
+            <img
+              src={PROFILE.mivaLogoDarkBg}
+              alt="MIVA Open University"
+              referrerPolicy="no-referrer"
+              onError={() => setLogoError(true)}
+              className="h-6 sm:h-7 w-auto object-contain shrink-0"
+            />
+          )}
+          <span
+            aria-hidden="true"
+            className={`${logoError ? 'hidden' : 'inline-block'} h-4 sm:h-5 w-px bg-white/25 shrink-0`}
+          />
+          <span className="truncate">{PROFILE.name}</span>
+        </button>
+
+        {/* Zone 2: Concise single-line navigation links */}
+        <nav aria-label="Main navigation" className="hidden md:flex items-center gap-7">
+          {NAV_ITEMS.map((item) => {
+            const isActive = currentPage === item.id;
+            return (
+              <button
+                key={item.id}
+                type="button"
+                onClick={() => handleSelect(item.id)}
+                aria-current={isActive ? 'page' : undefined}
+                className={`relative py-1 text-sm font-medium whitespace-nowrap shrink-0 transition-colors duration-150 cursor-pointer focus-visible:outline-2 focus-visible:outline-[#E63C36] focus-visible:outline-offset-4 rounded ${
+                  isActive
+                    ? 'text-white'
+                    : 'text-[#DBE6F2] hover:text-white'
+                }`}
+              >
+                {item.label}
+                <span
+                  aria-hidden="true"
+                  className={`absolute inset-x-0 -bottom-0.5 h-0.5 bg-[#E63C36] transition-opacity duration-150 ${
+                    isActive ? 'opacity-100' : 'opacity-0'
+                  }`}
+                />
+              </button>
+            );
+          })}
+        </nav>
+
+        {/* Zone 3: Single primary action + mobile menu trigger */}
+        <div className="flex items-center gap-3 shrink-0">
+          <button
+            type="button"
+            onClick={() => handleSelect('contact')}
+            className="hidden md:inline-flex items-center justify-center rounded-lg bg-[#E63C36] px-4 py-2 text-sm font-semibold text-white whitespace-nowrap shrink-0 transition-colors duration-150 hover:bg-[#C92D28] cursor-pointer focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-2"
+          >
+            Get in Touch
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setMobileOpen((prev) => !prev)}
+            aria-expanded={mobileOpen}
+            aria-controls="mobile-nav-menu"
+            aria-label={mobileOpen ? 'Close navigation menu' : 'Open navigation menu'}
+            className="inline-flex md:hidden items-center justify-center rounded-lg border border-white/25 px-3 py-2 text-sm font-medium text-white whitespace-nowrap shrink-0 hover:bg-[#14416F] transition-colors cursor-pointer"
+          >
+            {mobileOpen ? <X className="h-4 w-4 mr-1.5" /> : <Menu className="h-4 w-4 mr-1.5" />}
+            <span>{mobileOpen ? 'Close' : 'Menu'}</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile drawer */}
+      {mobileOpen && (
+        <nav
+          id="mobile-nav-menu"
+          aria-label="Mobile navigation"
+          className="md:hidden border-t border-white/10 bg-[#092440] px-6 py-4"
+        >
+          <ul className="flex flex-col gap-1">
+            {NAV_ITEMS.map((item) => {
+              const isActive = currentPage === item.id;
+              return (
+                <li key={item.id}>
+                  <button
+                    type="button"
+                    onClick={() => handleSelect(item.id)}
+                    aria-current={isActive ? 'page' : undefined}
+                    className={`w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium transition-colors cursor-pointer ${
+                      isActive
+                        ? 'bg-[#14416F] text-white'
+                        : 'text-[#DBE6F2] hover:bg-[#14416F]/60 hover:text-white'
+                    }`}
+                  >
+                    {item.label}
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        </nav>
+      )}
+    </header>
+  );
+}
