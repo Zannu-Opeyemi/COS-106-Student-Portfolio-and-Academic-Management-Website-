@@ -116,12 +116,12 @@ export function ContactView() {
         <form
           onSubmit={handleSubmit}
           noValidate
-          className="lg:col-span-7 rounded-2xl border border-[#D8E0EA] bg-white p-6 sm:p-8 space-y-5"
+          className="lg:col-span-7 rounded-2xl border border-[#D8E0EA] dark:border-[#1F3756] bg-white dark:bg-[#10243E] p-6 sm:p-8 space-y-5"
         >
           <div>
             <label
               htmlFor="contact-name"
-              className="block text-sm font-semibold text-[#0B2D4F] mb-1.5"
+              className="block text-sm font-semibold text-[#0B2D4F] dark:text-[#F0F5FA] mb-1.5"
             >
               Full Name
             </label>
@@ -136,14 +136,14 @@ export function ContactView() {
               onBlur={() => handleBlur('name')}
               aria-invalid={Boolean(errors.name)}
               aria-describedby={errors.name ? 'contact-name-error' : undefined}
-              className={`w-full rounded-lg border px-3.5 py-2.5 text-sm text-[#17212E] bg-white transition-colors focus:outline-none focus:ring-2 ${
+              className={`w-full rounded-lg border px-3.5 py-2.5 text-sm text-[#17212E] dark:text-[#D9E4F0] bg-white dark:bg-[#0B192C] transition-colors focus:outline-none focus:ring-2 ${
                 errors.name
-                  ? 'border-[#B3261E] focus:ring-[#B3261E]/20'
-                  : 'border-[#AAB8C8] focus:border-[#0B2D4F] focus:ring-[#0B2D4F]/15'
+                  ? 'border-[#B3261E] dark:border-[#FF746E] focus:ring-[#B3261E]/20 dark:focus:ring-[#FF746E]/25'
+                  : 'border-[#AAB8C8] dark:border-[#294568] focus:border-[#0B2D4F] dark:focus:border-[#5D8AB8] focus:ring-[#0B2D4F]/15 dark:focus:ring-[#5D8AB8]/25'
               }`}
             />
             {errors.name && (
-              <p id="contact-name-error" className="mt-1.5 text-xs font-medium text-[#B3261E]">
+              <p id="contact-name-error" className="mt-1.5 text-xs font-medium text-[#B3261E] dark:text-[#FF9A94]">
                 {errors.name}
               </p>
             )}
@@ -152,7 +152,7 @@ export function ContactView() {
           <div>
             <label
               htmlFor="contact-email"
-              className="block text-sm font-semibold text-[#0B2D4F] mb-1.5"
+              className="block text-sm font-semibold text-[#0B2D4F] dark:text-[#F0F5FA] mb-1.5"
             >
               Email Address
             </label>
@@ -168,14 +168,14 @@ export function ContactView() {
               onBlur={() => handleBlur('email')}
               aria-invalid={Boolean(errors.email)}
               aria-describedby={errors.email ? 'contact-email-error' : undefined}
-              className={`w-full rounded-lg border px-3.5 py-2.5 text-sm text-[#17212E] bg-white transition-colors focus:outline-none focus:ring-2 ${
+              className={`w-full rounded-lg border px-3.5 py-2.5 text-sm text-[#17212E] dark:text-[#D9E4F0] bg-white dark:bg-[#0B192C] transition-colors focus:outline-none focus:ring-2 ${
                 errors.email
-                  ? 'border-[#B3261E] focus:ring-[#B3261E]/20'
-                  : 'border-[#AAB8C8] focus:border-[#0B2D4F] focus:ring-[#0B2D4F]/15'
+                  ? 'border-[#B3261E] dark:border-[#FF746E] focus:ring-[#B3261E]/20 dark:focus:ring-[#FF746E]/25'
+                  : 'border-[#AAB8C8] dark:border-[#294568] focus:border-[#0B2D4F] dark:focus:border-[#5D8AB8] focus:ring-[#0B2D4F]/15 dark:focus:ring-[#5D8AB8]/25'
               }`}
             />
             {errors.email && (
-              <p id="contact-email-error" className="mt-1.5 text-xs font-medium text-[#B3261E]">
+              <p id="contact-email-error" className="mt-1.5 text-xs font-medium text-[#B3261E] dark:text-[#FF9A94]">
                 {errors.email}
               </p>
             )}
@@ -184,7 +184,7 @@ export function ContactView() {
           <div>
             <label
               htmlFor="contact-phone"
-              className="block text-sm font-semibold text-[#0B2D4F] mb-1.5"
+              className="block text-sm font-semibold text-[#0B2D4F] dark:text-[#F0F5FA] mb-1.5"
             >
               Phone Number
             </label>
@@ -200,14 +200,14 @@ export function ContactView() {
               onBlur={() => handleBlur('phone')}
               aria-invalid={Boolean(errors.phone)}
               aria-describedby={errors.phone ? 'contact-phone-error' : undefined}
-              className={`w-full rounded-lg border px-3.5 py-2.5 text-sm text-[#17212E] bg-white transition-colors focus:outline-none focus:ring-2 ${
+              className={`w-full rounded-lg border px-3.5 py-2.5 text-sm text-[#17212E] dark:text-[#D9E4F0] bg-white dark:bg-[#0B192C] transition-colors focus:outline-none focus:ring-2 ${
                 errors.phone
-                  ? 'border-[#B3261E] focus:ring-[#B3261E]/20'
-                  : 'border-[#AAB8C8] focus:border-[#0B2D4F] focus:ring-[#0B2D4F]/15'
+                  ? 'border-[#B3261E] dark:border-[#FF746E] focus:ring-[#B3261E]/20 dark:focus:ring-[#FF746E]/25'
+                  : 'border-[#AAB8C8] dark:border-[#294568] focus:border-[#0B2D4F] dark:focus:border-[#5D8AB8] focus:ring-[#0B2D4F]/15 dark:focus:ring-[#5D8AB8]/25'
               }`}
             />
             {errors.phone && (
-              <p id="contact-phone-error" className="mt-1.5 text-xs font-medium text-[#B3261E]">
+              <p id="contact-phone-error" className="mt-1.5 text-xs font-medium text-[#B3261E] dark:text-[#FF9A94]">
                 {errors.phone}
               </p>
             )}
@@ -216,7 +216,7 @@ export function ContactView() {
           <div>
             <label
               htmlFor="contact-message"
-              className="block text-sm font-semibold text-[#0B2D4F] mb-1.5"
+              className="block text-sm font-semibold text-[#0B2D4F] dark:text-[#F0F5FA] mb-1.5"
             >
               Message
             </label>
@@ -230,14 +230,14 @@ export function ContactView() {
               onBlur={() => handleBlur('message')}
               aria-invalid={Boolean(errors.message)}
               aria-describedby={errors.message ? 'contact-message-error' : undefined}
-              className={`w-full rounded-lg border px-3.5 py-2.5 text-sm text-[#17212E] bg-white transition-colors focus:outline-none focus:ring-2 ${
+              className={`w-full rounded-lg border px-3.5 py-2.5 text-sm text-[#17212E] dark:text-[#D9E4F0] bg-white dark:bg-[#0B192C] transition-colors focus:outline-none focus:ring-2 ${
                 errors.message
-                  ? 'border-[#B3261E] focus:ring-[#B3261E]/20'
-                  : 'border-[#AAB8C8] focus:border-[#0B2D4F] focus:ring-[#0B2D4F]/15'
+                  ? 'border-[#B3261E] dark:border-[#FF746E] focus:ring-[#B3261E]/20 dark:focus:ring-[#FF746E]/25'
+                  : 'border-[#AAB8C8] dark:border-[#294568] focus:border-[#0B2D4F] dark:focus:border-[#5D8AB8] focus:ring-[#0B2D4F]/15 dark:focus:ring-[#5D8AB8]/25'
               }`}
             />
             {errors.message && (
-              <p id="contact-message-error" className="mt-1.5 text-xs font-medium text-[#B3261E]">
+              <p id="contact-message-error" className="mt-1.5 text-xs font-medium text-[#B3261E] dark:text-[#FF9A94]">
                 {errors.message}
               </p>
             )}
@@ -255,8 +255,8 @@ export function ContactView() {
               role="status"
               className={`flex items-center gap-2.5 rounded-lg border px-4 py-3 text-sm font-semibold ${
                 statusMessage.type === 'success'
-                  ? 'border-[#2F8F5B]/30 bg-[#E6F4EC] text-[#17523A]'
-                  : 'border-[#B3261E]/30 bg-[#FCECEB] text-[#B3261E]'
+                  ? 'border-[#2F8F5B]/30 dark:border-[#2F8F5B]/45 bg-[#E6F4EC] dark:bg-[#123325] text-[#17523A] dark:text-[#7FE3AB]'
+                  : 'border-[#B3261E]/30 dark:border-[#B3261E]/50 bg-[#FCECEB] dark:bg-[#3A1618] text-[#B3261E] dark:text-[#FF9A94]'
               }`}
             >
               {statusMessage.type === 'success' && (
@@ -269,18 +269,18 @@ export function ContactView() {
 
         {/* Direct Contact Channels */}
         <aside className="lg:col-span-5 space-y-6">
-          <h2 className="font-display text-2xl font-bold text-[#0B2D4F]">
+          <h2 className="font-display text-2xl font-bold text-[#0B2D4F] dark:text-[#F0F5FA]">
             Other Ways to Reach Me
           </h2>
-          <div className="rounded-2xl border border-[#D8E0EA] bg-white divide-y divide-[#D8E0EA]">
+          <div className="rounded-2xl border border-[#D8E0EA] dark:border-[#1F3756] bg-white dark:bg-[#10243E] divide-y divide-[#D8E0EA] dark:divide-[#1F3756]">
             <a
               href={PROFILE.phoneHref}
-              className="flex items-center gap-4 p-5 hover:bg-[#F6F8FB] transition-colors"
+              className="flex items-center gap-4 p-5 hover:bg-[#F6F8FB] dark:hover:bg-[#162C49] transition-colors"
             >
-              <Phone className="h-5 w-5 text-[#E63C36] shrink-0" />
+              <Phone className="h-5 w-5 text-[#E63C36] dark:text-[#FF746E] shrink-0" />
               <div>
-                <p className="text-xs font-medium text-[#5A6B7E]">Phone</p>
-                <p className="text-sm font-semibold text-[#0B2D4F] tabular-nums">
+                <p className="text-xs font-medium text-[#5A6B7E] dark:text-[#98AFC7]">Phone</p>
+                <p className="text-sm font-semibold text-[#0B2D4F] dark:text-[#F0F5FA] tabular-nums">
                   {PROFILE.phoneDisplay}
                 </p>
               </div>
@@ -288,12 +288,12 @@ export function ContactView() {
 
             <a
               href={`mailto:${PROFILE.email}`}
-              className="flex items-center gap-4 p-5 hover:bg-[#F6F8FB] transition-colors"
+              className="flex items-center gap-4 p-5 hover:bg-[#F6F8FB] dark:hover:bg-[#162C49] transition-colors"
             >
-              <Mail className="h-5 w-5 text-[#E63C36] shrink-0" />
+              <Mail className="h-5 w-5 text-[#E63C36] dark:text-[#FF746E] shrink-0" />
               <div className="min-w-0">
-                <p className="text-xs font-medium text-[#5A6B7E]">Email</p>
-                <p className="text-sm font-semibold text-[#0B2D4F] truncate">
+                <p className="text-xs font-medium text-[#5A6B7E] dark:text-[#98AFC7]">Email</p>
+                <p className="text-sm font-semibold text-[#0B2D4F] dark:text-[#F0F5FA] truncate">
                   {PROFILE.email}
                 </p>
               </div>
@@ -301,10 +301,10 @@ export function ContactView() {
 
             <div className="flex items-center justify-between gap-4 p-5">
               <div className="flex items-center gap-4">
-                <GraduationCap className="h-5 w-5 text-[#0B2D4F] shrink-0" />
+                <GraduationCap className="h-5 w-5 text-[#0B2D4F] dark:text-[#DFC5A6] shrink-0" />
                 <div>
-                  <p className="text-xs font-medium text-[#5A6B7E]">University</p>
-                  <p className="text-sm font-semibold text-[#0B2D4F]">
+                  <p className="text-xs font-medium text-[#5A6B7E] dark:text-[#98AFC7]">University</p>
+                  <p className="text-sm font-semibold text-[#0B2D4F] dark:text-[#F0F5FA]">
                     {PROFILE.university}
                   </p>
                 </div>
@@ -316,7 +316,7 @@ export function ContactView() {
                 onError={(e) => {
                   e.currentTarget.style.display = 'none';
                 }}
-                className="h-7 w-auto object-contain shrink-0"
+                className="h-7 w-auto object-contain shrink-0 dark:rounded dark:bg-white dark:px-2 dark:py-1"
               />
             </div>
 
@@ -324,15 +324,15 @@ export function ContactView() {
               href={PROFILE.githubUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-between gap-4 p-5 hover:bg-[#F6F8FB] transition-colors"
+              className="flex items-center justify-between gap-4 p-5 hover:bg-[#F6F8FB] dark:hover:bg-[#162C49] transition-colors"
             >
               <div>
-                <p className="text-xs font-medium text-[#5A6B7E]">GitHub</p>
-                <p className="text-sm font-semibold text-[#0B2D4F]">
+                <p className="text-xs font-medium text-[#5A6B7E] dark:text-[#98AFC7]">GitHub</p>
+                <p className="text-sm font-semibold text-[#0B2D4F] dark:text-[#F0F5FA]">
                   github.com/Zannu-Opeyemi
                 </p>
               </div>
-              <ExternalLink className="h-4 w-4 text-[#5A6B7E] shrink-0" />
+              <ExternalLink className="h-4 w-4 text-[#5A6B7E] dark:text-[#98AFC7] shrink-0" />
             </a>
           </div>
         </aside>

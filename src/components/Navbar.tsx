@@ -1,10 +1,13 @@
-import { Menu, X } from 'lucide-react';
-import { useState } from 'react';
+import { Menu, Moon, Sun, X } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { ThemeMode } from '../App';
 import { PageId, PROFILE } from '../data/portfolioData';
 
 interface NavbarProps {
   currentPage: PageId;
   onNavigate: (page: PageId) => void;
+  theme: ThemeMode;
+  onToggleTheme: () => void;
 }
 
 const NAV_ITEMS: { id: PageId; label: string }[] = [
@@ -15,9 +18,25 @@ const NAV_ITEMS: { id: PageId; label: string }[] = [
   { id: 'contact', label: 'Contact' },
 ];
 
-export function Navbar({ currentPage, onNavigate }: NavbarProps) {
+export function Navbar({
+  currentPage,
+  onNavigate,
+  theme,
+  onToggleTheme,
+}: NavbarProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [logoError, setLogoError] = useState(false);
+
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setMobileOpen(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [mobileOpen]);
 
   const handleSelect = (page: PageId) => {
     onNavigate(page);
@@ -26,12 +45,12 @@ export function Navbar({ currentPage, onNavigate }: NavbarProps) {
 
   return (
     <header className="sticky top-0 z-40 bg-[#0B2D4F]/98 backdrop-blur-xs text-white border-b border-white/10">
-      <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 md:gap-8 px-4 sm:px-6 py-4">
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 sm:gap-4 md:gap-8 px-4 sm:px-6 py-4">
         {/* Zone 1: Brand wordmark + MIVA institutional mark */}
         <button
           type="button"
           onClick={() => handleSelect('home')}
-          className="flex min-w-0 items-center gap-2.5 sm:gap-3 font-display text-sm sm:text-lg font-bold tracking-tight text-white whitespace-nowrap shrink-0 max-w-[calc(100%-96px)] md:max-w-none text-left cursor-pointer focus-visible:outline-2 focus-visible:outline-[#E63C36] focus-visible:outline-offset-4 rounded"
+          className="flex min-w-0 flex-1 md:flex-none md:shrink-0 items-center gap-2.5 sm:gap-3 font-display text-sm sm:text-lg font-bold tracking-tight text-white whitespace-nowrap text-left cursor-pointer focus-visible:outline-2 focus-visible:outline-[#E63C36] focus-visible:outline-offset-4 rounded"
         >
           {!logoError && (
             <img
@@ -77,8 +96,28 @@ export function Navbar({ currentPage, onNavigate }: NavbarProps) {
           })}
         </nav>
 
-        {/* Zone 3: Single primary action + mobile menu trigger */}
-        <div className="flex items-center gap-3 shrink-0">
+        {/* Zone 3: Theme toggle + primary action + mobile menu trigger */}
+        <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
+          <button
+            type="button"
+            onClick={onToggleTheme}
+            aria-label={
+              theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'
+            }
+            aria-pressed={theme === 'dark'}
+            title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+            className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-white/25 bg-white/5 px-2.5 sm:px-3 py-2 text-xs sm:text-sm font-medium text-white whitespace-nowrap shrink-0 hover:bg-[#14416F] transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-2"
+          >
+            {theme === 'dark' ? (
+              <Sun className="h-4 w-4 text-[#DFC5A6]" />
+            ) : (
+              <Moon className="h-4 w-4 text-[#DBE6F2]" />
+            )}
+            <span className="hidden lg:inline">
+              {theme === 'dark' ? 'Light' : 'Dark'}
+            </span>
+          </button>
+
           <button
             type="button"
             onClick={() => handleSelect('contact')}

@@ -1,11 +1,19 @@
-import { ArrowRight, ExternalLink, Pause, Play, Shield, Volume2 } from 'lucide-react';
+import { ArrowRight, Award, ExternalLink, FileText, Pause, Play, Shield, Volume2 } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { PageId, PROFILE, ProjectItem, PROJECTS } from '../data/portfolioData';
+import {
+  CERTIFICATIONS,
+  CertificationItem,
+  PageId,
+  PROFILE,
+  ProjectItem,
+  PROJECTS,
+} from '../data/portfolioData';
 import { CybersecurityDailyTip } from './CybersecurityDailyTip';
 
 interface HomeViewProps {
-  onNavigate: (page: PageId) => void;
+  onNavigate: (page: PageId, sectionId?: string) => void;
   onSelectProject: (project: ProjectItem) => void;
+  onSelectCertification: (cert: CertificationItem) => void;
 }
 
 const EXPLORE_ITEMS: { num: string; page: PageId; title: string; desc: string }[] = [
@@ -13,7 +21,7 @@ const EXPLORE_ITEMS: { num: string; page: PageId; title: string; desc: string }[
     num: '01.',
     page: 'about',
     title: 'About Me',
-    desc: 'Education, 100L MIVA coursework, technical skills and interests',
+    desc: 'Education, 27 certifications, 100L MIVA coursework, skills and interests',
   },
   {
     num: '02.',
@@ -41,7 +49,11 @@ const EXPLORE_ITEMS: { num: string; page: PageId; title: string; desc: string }[
   },
 ];
 
-export function HomeView({ onNavigate, onSelectProject }: HomeViewProps) {
+export function HomeView({
+  onNavigate,
+  onSelectProject,
+  onSelectCertification,
+}: HomeViewProps) {
   const [portraitLoaded, setPortraitLoaded] = useState(false);
   const [portraitError, setPortraitError] = useState(false);
   const [mivaLogoError, setMivaLogoError] = useState(false);
@@ -51,6 +63,8 @@ export function HomeView({ onNavigate, onSelectProject }: HomeViewProps) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const portraitImgRef = useRef<HTMLImageElement | null>(null);
   const spokeFromButtonRef = useRef(false);
+  const utteranceIdRef = useRef(0);
+  const speechActiveRef = useRef(false);
 
   useEffect(() => {
     if (
@@ -61,36 +75,76 @@ export function HomeView({ onNavigate, onSelectProject }: HomeViewProps) {
     }
   }, []);
 
-  const speakWelcomeMessage = useCallback((onBlocked?: () => void) => {
-    if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
-    window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance('Welcome to my portfolio.');
-    utterance.lang = 'en-US';
-    utterance.rate = 0.95;
-    utterance.pitch = 1;
-    utterance.onstart = () => {
-      try {
-        sessionStorage.setItem('zoe_welcome_spoken', '1');
-      } catch {
-        // Ignore storage restrictions
-      }
-      setIsPlaying(true);
-    };
-    utterance.onend = () => {
-      if (!audioRef.current || audioRef.current.paused) {
-        setIsPlaying(false);
-      }
-    };
-    utterance.onerror = (event) => {
-      if (!audioRef.current || audioRef.current.paused) {
-        setIsPlaying(false);
-      }
-      if (event.error === 'not-allowed' && onBlocked) {
-        onBlocked();
-      }
-    };
-    window.speechSynthesis.speak(utterance);
+  const syncPlayingState = useCallback(() => {
+    const audioPlaying = Boolean(
+      audioRef.current && !audioRef.current.paused && !audioRef.current.ended
+    );
+    setIsPlaying(speechActiveRef.current || audioPlaying);
   }, []);
+
+  const stopSpeech = useCallback(() => {
+    utteranceIdRef.current += 1;
+    speechActiveRef.current = false;
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+    }
+  }, []);
+
+  const speakWelcomeMessage = useCallback(
+    (onBlocked?: () => void) => {
+      if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
+        return false;
+      }
+
+      const nextId = ++utteranceIdRef.current;
+      speechActiveRef.current = false;
+      window.speechSynthesis.cancel();
+
+      const utterance = new SpeechSynthesisUtterance('Welcome to my portfolio.');
+      utterance.lang = 'en-US';
+      utterance.rate = 0.95;
+      utterance.pitch = 1;
+
+      const safetyTimer = window.setTimeout(() => {
+        if (utteranceIdRef.current === nextId && !speechActiveRef.current) {
+          syncPlayingState();
+        }
+      }, 1500);
+
+      utterance.onstart = () => {
+        window.clearTimeout(safetyTimer);
+        if (utteranceIdRef.current !== nextId) return;
+        speechActiveRef.current = true;
+        try {
+          sessionStorage.setItem('zoe_welcome_spoken', '1');
+        } catch {
+          // Ignore storage restrictions
+        }
+        setIsPlaying(true);
+      };
+
+      utterance.onend = () => {
+        window.clearTimeout(safetyTimer);
+        if (utteranceIdRef.current !== nextId) return;
+        speechActiveRef.current = false;
+        syncPlayingState();
+      };
+
+      utterance.onerror = (event) => {
+        window.clearTimeout(safetyTimer);
+        if (utteranceIdRef.current !== nextId) return;
+        speechActiveRef.current = false;
+        syncPlayingState();
+        if (event.error === 'not-allowed' && onBlocked) {
+          onBlocked();
+        }
+      };
+
+      window.speechSynthesis.speak(utterance);
+      return true;
+    },
+    [syncPlayingState]
+  );
 
   useEffect(() => {
     let alreadySpoken = false;
@@ -105,7 +159,15 @@ export function HomeView({ onNavigate, onSelectProject }: HomeViewProps) {
     if (!alreadySpoken && typeof window !== 'undefined' && 'speechSynthesis' in window) {
       const attachFirstGestureFallback = () => {
         if (cleanupInteraction) return;
-        const handleFirstGesture = () => {
+        const handleFirstGesture = (event: Event) => {
+          if (
+            event.target instanceof Element &&
+            event.target.closest('[data-welcome-audio-card]')
+          ) {
+            cleanupInteraction?.();
+            cleanupInteraction = undefined;
+            return;
+          }
           cleanupInteraction?.();
           cleanupInteraction = undefined;
           try {
@@ -115,8 +177,8 @@ export function HomeView({ onNavigate, onSelectProject }: HomeViewProps) {
           }
           speakWelcomeMessage();
         };
-        window.addEventListener('pointerdown', handleFirstGesture, { once: true });
-        window.addEventListener('keydown', handleFirstGesture, { once: true });
+        window.addEventListener('pointerdown', handleFirstGesture);
+        window.addEventListener('keydown', handleFirstGesture);
         cleanupInteraction = () => {
           window.removeEventListener('pointerdown', handleFirstGesture);
           window.removeEventListener('keydown', handleFirstGesture);
@@ -130,16 +192,14 @@ export function HomeView({ onNavigate, onSelectProject }: HomeViewProps) {
       return () => {
         window.clearTimeout(timer);
         cleanupInteraction?.();
-        window.speechSynthesis.cancel();
+        stopSpeech();
       };
     }
 
     return () => {
-      if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-      }
+      stopSpeech();
     };
-  }, [speakWelcomeMessage]);
+  }, [speakWelcomeMessage, stopSpeech]);
 
   const toggleWelcomeAudio = () => {
     const audio = audioRef.current;
@@ -150,9 +210,7 @@ export function HomeView({ onNavigate, onSelectProject }: HomeViewProps) {
     }
 
     if (isPlaying) {
-      if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-      }
+      stopSpeech();
       if (audio) {
         audio.pause();
         audio.currentTime = 0;
@@ -162,15 +220,24 @@ export function HomeView({ onNavigate, onSelectProject }: HomeViewProps) {
     }
 
     spokeFromButtonRef.current = true;
-    speakWelcomeMessage();
+    const speechStarted = speakWelcomeMessage();
     if (audio) {
       audio.volume = 0.25;
       audio.currentTime = 0;
-      audio.play().catch(() => {
-        spokeFromButtonRef.current = false;
-      });
+      audio
+        .play()
+        .then(() => {
+          setIsPlaying(true);
+        })
+        .catch(() => {
+          spokeFromButtonRef.current = false;
+          if (!speechStarted) {
+            setIsPlaying(false);
+          }
+        });
+    } else if (!speechStarted) {
+      setIsPlaying(false);
     }
-    setIsPlaying(true);
   };
 
   return (
@@ -228,9 +295,7 @@ export function HomeView({ onNavigate, onSelectProject }: HomeViewProps) {
                       referrerPolicy="no-referrer"
                       onLoad={() => setPortraitLoaded(true)}
                       onError={() => setPortraitError(true)}
-                      className={`h-full min-h-[320px] max-h-[440px] w-full object-cover object-[50%_22%] transition-opacity duration-200 motion-reduce:transition-none ${
-                        portraitLoaded ? 'opacity-100' : 'opacity-0'
-                      }`}
+                      className="relative z-10 h-full min-h-[320px] max-h-[440px] w-full object-cover object-[50%_22%]"
                     />
                   ) : (
                     <div className="flex min-h-[340px] w-full flex-col items-center justify-center bg-[#14416F] p-8 text-center text-white">
@@ -286,19 +351,19 @@ export function HomeView({ onNavigate, onSelectProject }: HomeViewProps) {
       </section>
 
       {/* Biography & Site Exploration Band */}
-      <section className="bg-white border-b border-[#DCE3EC]">
+      <section className="bg-white dark:bg-[#0D1E34] border-b border-[#DCE3EC] dark:border-[#1F3756]">
         <div className="mx-auto max-w-7xl px-6 py-16 grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
           <article className="lg:col-span-6 space-y-5">
             <div>
-              <p className="text-xs font-semibold tracking-wide text-[#B89A7A]">
+              <p className="text-xs font-semibold tracking-wide text-[#B89A7A] dark:text-[#DFC5A6]">
                 Introduction
               </p>
-              <h2 className="font-display mt-1 text-2xl sm:text-3xl font-bold text-[#0B2D4F]">
+              <h2 className="font-display mt-1 text-2xl sm:text-3xl font-bold text-[#0B2D4F] dark:text-[#F0F5FA]">
                 Brief Biography
               </h2>
             </div>
 
-            <div className="space-y-4 text-base leading-relaxed text-[#17212E] max-w-[65ch]">
+            <div className="space-y-4 text-base leading-relaxed text-[#17212E] dark:text-[#D9E4F0] max-w-[65ch]">
               <p>
                 I am a Cybersecurity student at MIVA Open University. I am learning how
                 to defend systems and I build practical projects to prove it, from
@@ -311,14 +376,14 @@ export function HomeView({ onNavigate, onSelectProject }: HomeViewProps) {
             </div>
 
             {/* Welcome Audio Player */}
-            <div className="pt-2">
-              <div className="rounded-2xl border border-[#DCE3EC] bg-[#F6F8FB] p-4 sm:p-5 space-y-3.5">
+            <div className="pt-2" data-welcome-audio-card>
+              <div className="rounded-2xl border border-[#DCE3EC] dark:border-[#1F3756] bg-[#F6F8FB] dark:bg-[#091526] p-4 sm:p-5 space-y-3.5">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                   <div className="flex items-center gap-3.5">
                     <button
                       type="button"
                       onClick={toggleWelcomeAudio}
-                      className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#0B2D4F] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#14416F] transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+                      className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#0B2D4F] dark:bg-[#194775] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#14416F] dark:hover:bg-[#21578D] transition-colors whitespace-nowrap shrink-0 cursor-pointer"
                     >
                       {isPlaying ? (
                         <>
@@ -332,12 +397,12 @@ export function HomeView({ onNavigate, onSelectProject }: HomeViewProps) {
                         </>
                       )}
                     </button>
-                    <div className="flex items-center gap-2 text-sm text-[#17212E] font-medium">
-                      <Volume2 className="h-4 w-4 shrink-0 text-[#0B2D4F]" />
+                    <div className="flex items-center gap-2 text-sm text-[#17212E] dark:text-[#F0F5FA] font-medium">
+                      <Volume2 className="h-4 w-4 shrink-0 text-[#0B2D4F] dark:text-[#DFC5A6]" />
                       <span>“Welcome to my portfolio.”</span>
                     </div>
                   </div>
-                  <span className="text-xs font-medium text-[#5A6B7E] tabular-nums">
+                  <span className="text-xs font-medium text-[#5A6B7E] dark:text-[#98AFC7] tabular-nums">
                     {isPlaying ? 'Speaking' : 'Audio Ready'}
                   </span>
                 </div>
@@ -359,22 +424,10 @@ export function HomeView({ onNavigate, onSelectProject }: HomeViewProps) {
                     speakWelcomeMessage();
                   }}
                   onPause={() => {
-                    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-                      if (!window.speechSynthesis.speaking) {
-                        setIsPlaying(false);
-                      }
-                    } else {
-                      setIsPlaying(false);
-                    }
+                    syncPlayingState();
                   }}
                   onEnded={() => {
-                    if (
-                      typeof window === 'undefined' ||
-                      !('speechSynthesis' in window) ||
-                      !window.speechSynthesis.speaking
-                    ) {
-                      setIsPlaying(false);
-                    }
+                    syncPlayingState();
                   }}
                   className="w-full h-9"
                 >
@@ -387,34 +440,34 @@ export function HomeView({ onNavigate, onSelectProject }: HomeViewProps) {
 
           <aside className="lg:col-span-6">
             <div className="mb-4">
-              <p className="text-xs font-semibold tracking-wide text-[#B89A7A]">
+              <p className="text-xs font-semibold tracking-wide text-[#B89A7A] dark:text-[#DFC5A6]">
                 Site Directory
               </p>
-              <h2 className="font-display mt-1 text-2xl sm:text-3xl font-bold text-[#0B2D4F]">
+              <h2 className="font-display mt-1 text-2xl sm:text-3xl font-bold text-[#0B2D4F] dark:text-[#F0F5FA]">
                 Explore the Site
               </h2>
             </div>
 
-            <ul className="divide-y divide-[#DCE3EC] border-y border-[#DCE3EC]">
+            <ul className="divide-y divide-[#DCE3EC] dark:divide-[#1F3756] border-y border-[#DCE3EC] dark:border-[#1F3756]">
               {EXPLORE_ITEMS.map((item) => (
                 <li key={item.page}>
                   <button
                     type="button"
                     onClick={() => onNavigate(item.page)}
-                    className="group w-full py-3.5 flex items-center justify-between gap-4 text-left cursor-pointer transition-colors hover:bg-[#F6F8FB] px-2 -mx-2 rounded-lg"
+                    className="group w-full py-3.5 flex items-center justify-between gap-4 text-left cursor-pointer transition-colors hover:bg-[#F6F8FB] dark:hover:bg-[#10243E] px-2 -mx-2 rounded-lg"
                   >
                     <div>
-                      <p className="text-sm font-bold text-[#0B2D4F] group-hover:text-[#E63C36] transition-colors">
-                        <span className="tabular-nums mr-2.5 text-[#B89A7A]">
+                      <p className="text-sm font-bold text-[#0B2D4F] dark:text-[#F0F5FA] group-hover:text-[#E63C36] dark:group-hover:text-[#FF746E] transition-colors">
+                        <span className="tabular-nums mr-2.5 text-[#B89A7A] dark:text-[#DFC5A6]">
                           {item.num}
                         </span>
                         {item.title}
                       </p>
-                      <p className="mt-0.5 text-xs sm:text-sm text-[#5A6B7E] pl-7">
+                      <p className="mt-0.5 text-xs sm:text-sm text-[#5A6B7E] dark:text-[#98AFC7] pl-7">
                         {item.desc}
                       </p>
                     </div>
-                    <ArrowRight className="h-4 w-4 text-[#5A6B7E] group-hover:text-[#E63C36] group-hover:translate-x-0.5 transition-all shrink-0" />
+                    <ArrowRight className="h-4 w-4 text-[#5A6B7E] dark:text-[#98AFC7] group-hover:text-[#E63C36] dark:group-hover:text-[#FF746E] group-hover:translate-x-0.5 transition-all shrink-0" />
                   </button>
                 </li>
               ))}
@@ -429,20 +482,20 @@ export function HomeView({ onNavigate, onSelectProject }: HomeViewProps) {
       <section className="mx-auto max-w-7xl px-6 py-16">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
           <div>
-            <p className="text-xs font-semibold tracking-wide text-[#B89A7A]">
+            <p className="text-xs font-semibold tracking-wide text-[#B89A7A] dark:text-[#DFC5A6]">
               Portfolio Work
             </p>
-            <h2 className="font-display mt-1 text-2xl sm:text-3xl font-bold text-[#0B2D4F]">
+            <h2 className="font-display mt-1 text-2xl sm:text-3xl font-bold text-[#0B2D4F] dark:text-[#F0F5FA]">
               Selected Cybersecurity Builds
             </h2>
-            <p className="mt-2 text-sm sm:text-base text-[#5A6B7E]">
+            <p className="mt-2 text-sm sm:text-base text-[#5A6B7E] dark:text-[#98AFC7]">
               Three defensive Python and web projects built around synthetic datasets.
             </p>
           </div>
           <button
             type="button"
             onClick={() => onNavigate('projects')}
-            className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#0B2D4F] hover:text-[#E63C36] transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+            className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#0B2D4F] dark:text-[#F0F5FA] hover:text-[#E63C36] dark:hover:text-[#FF746E] transition-colors whitespace-nowrap shrink-0 cursor-pointer"
           >
             <span>Open full projects page</span>
             <ArrowRight className="h-4 w-4" />
@@ -453,7 +506,7 @@ export function HomeView({ onNavigate, onSelectProject }: HomeViewProps) {
           {PROJECTS.map((project) => (
             <article
               key={project.id}
-              className="flex flex-col rounded-2xl border border-[#DCE3EC] bg-white overflow-hidden transition-all duration-150 hover:border-[#B8C6D8] hover:shadow-sm"
+              className="flex flex-col rounded-2xl border border-[#DCE3EC] dark:border-[#1F3756] bg-white dark:bg-[#10243E] overflow-hidden transition-all duration-150 hover:border-[#B8C6D8] dark:hover:border-[#345682] hover:shadow-sm"
             >
               <button
                 type="button"
@@ -468,6 +521,11 @@ export function HomeView({ onNavigate, onSelectProject }: HomeViewProps) {
                 )}
                 {!failedImages[project.id] ? (
                   <img
+                    ref={(el) => {
+                      if (el?.complete && el.naturalWidth > 0 && !loadedImages[project.id]) {
+                        setLoadedImages((prev) => ({ ...prev, [project.id]: true }));
+                      }
+                    }}
                     src={project.image}
                     alt={project.imageAlt}
                     referrerPolicy="no-referrer"
@@ -477,9 +535,7 @@ export function HomeView({ onNavigate, onSelectProject }: HomeViewProps) {
                     onError={() =>
                       setFailedImages((prev) => ({ ...prev, [project.id]: true }))
                     }
-                    className={`h-full w-full object-cover transition-[transform,opacity] duration-200 group-hover:scale-[1.02] motion-reduce:transition-none ${
-                      loadedImages[project.id] ? 'opacity-100' : 'opacity-0'
-                    }`}
+                    className="relative z-10 h-full w-full object-cover transition-transform duration-200 group-hover:scale-[1.02] motion-reduce:transition-none"
                   />
                 ) : (
                   <div className="flex h-full w-full items-center justify-center p-6 text-white/80">
@@ -489,24 +545,24 @@ export function HomeView({ onNavigate, onSelectProject }: HomeViewProps) {
               </button>
 
               <div className="flex flex-1 flex-col p-6">
-                <p className="text-xs font-medium text-[#5A6B7E]">
+                <p className="text-xs font-medium text-[#5A6B7E] dark:text-[#98AFC7]">
                   {project.category} ·{' '}
                   <span className="tabular-nums">Completed {project.completionDate}</span>
                 </p>
-                <h3 className="font-display mt-1.5 text-xl font-bold text-[#0B2D4F]">
+                <h3 className="font-display mt-1.5 text-xl font-bold text-[#0B2D4F] dark:text-[#F0F5FA]">
                   {project.title}
                 </h3>
-                <p className="mt-2.5 flex-1 text-sm leading-relaxed text-[#17212E]">
+                <p className="mt-2.5 flex-1 text-sm leading-relaxed text-[#17212E] dark:text-[#D9E4F0]">
                   {project.summary}
                 </p>
-                <p className="mt-4 text-xs font-medium text-[#5A6B7E]">
+                <p className="mt-4 text-xs font-medium text-[#5A6B7E] dark:text-[#98AFC7]">
                   {project.stack.join(' · ')}
                 </p>
-                <div className="mt-5 flex items-center justify-between border-t border-[#DCE3EC] pt-4 text-sm font-semibold">
+                <div className="mt-5 flex items-center justify-between border-t border-[#DCE3EC] dark:border-[#1F3756] pt-4 text-sm font-semibold">
                   <button
                     type="button"
                     onClick={() => onSelectProject(project)}
-                    className="text-[#0B2D4F] hover:text-[#E63C36] transition-colors cursor-pointer"
+                    className="text-[#0B2D4F] dark:text-[#F0F5FA] hover:text-[#E63C36] dark:hover:text-[#FF746E] transition-colors cursor-pointer"
                   >
                     Inspect Details
                   </button>
@@ -514,7 +570,7 @@ export function HomeView({ onNavigate, onSelectProject }: HomeViewProps) {
                     href={project.githubUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-[#0B2D4F] hover:text-[#E63C36] transition-colors"
+                    className="inline-flex items-center gap-1 text-[#0B2D4F] dark:text-[#F0F5FA] hover:text-[#E63C36] dark:hover:text-[#FF746E] transition-colors"
                   >
                     <span>GitHub</span>
                     <ExternalLink className="h-3.5 w-3.5" />
@@ -523,6 +579,107 @@ export function HomeView({ onNavigate, onSelectProject }: HomeViewProps) {
               </div>
             </article>
           ))}
+        </div>
+      </section>
+
+      {/* Featured Certifications & Badges Strip */}
+      <section className="bg-white dark:bg-[#0D1E34] border-t border-[#DCE3EC] dark:border-[#1F3756]">
+        <div className="mx-auto max-w-7xl px-6 py-16">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
+            <div>
+              <p className="text-xs font-semibold tracking-wide text-[#B89A7A] dark:text-[#DFC5A6]">
+                Verified Training · {CERTIFICATIONS.length} Credentials
+              </p>
+              <h2 className="font-display mt-1 text-2xl sm:text-3xl font-bold text-[#0B2D4F] dark:text-[#F0F5FA]">
+                Featured Certifications &amp; Badges
+              </h2>
+              <p className="mt-2 text-sm sm:text-base text-[#5A6B7E] dark:text-[#98AFC7]">
+                Selected industry certifications, digital badges, and internship
+                credentials.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => onNavigate('about', 'certifications-section')}
+              className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#0B2D4F] dark:text-[#F0F5FA] hover:text-[#E63C36] dark:hover:text-[#FF746E] transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+            >
+              <span>View all {CERTIFICATIONS.length} certifications</span>
+              <ArrowRight className="h-4 w-4" />
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {CERTIFICATIONS.filter((cert) => cert.featured).map((cert) => (
+              <article
+                key={cert.id}
+                className="group flex flex-col justify-between rounded-2xl border border-[#DCE3EC] dark:border-[#1F3756] bg-[#F6F8FB] dark:bg-[#10243E] overflow-hidden transition-colors hover:border-[#9FB1C8] dark:hover:border-[#345682]"
+              >
+                <div>
+                  <button
+                    type="button"
+                    onClick={() => onSelectCertification(cert)}
+                    aria-label={`Inspect ${cert.title}`}
+                    className="relative flex aspect-[16/10] w-full items-center justify-center overflow-hidden border-b border-[#DCE3EC] dark:border-[#1F3756] bg-white p-3 text-left cursor-pointer"
+                  >
+                    <img
+                      src={cert.previewImage}
+                      alt={cert.title}
+                      loading="lazy"
+                      referrerPolicy="no-referrer"
+                      className="h-full w-full object-contain transition-transform duration-200 group-hover:scale-[1.03] motion-reduce:transform-none"
+                    />
+                  </button>
+
+                  <div className="p-5">
+                    <div className="flex items-center justify-between gap-2 mb-1.5">
+                      <span className="text-xs font-medium text-[#5A6B7E] dark:text-[#98AFC7]">
+                        {cert.category}
+                      </span>
+                      <span className="text-xs font-medium text-[#5A6B7E] dark:text-[#98AFC7] tabular-nums">
+                        {cert.date}
+                      </span>
+                    </div>
+                    <h3 className="font-display text-base font-bold text-[#0B2D4F] dark:text-[#F0F5FA] leading-snug">
+                      {cert.title}
+                    </h3>
+                    <p className="mt-1 text-xs font-semibold text-[#17212E] dark:text-[#D9E4F0]">
+                      {cert.issuer}
+                    </p>
+                    <p className="mt-2.5 text-xs sm:text-sm leading-relaxed text-[#5A6B7E] dark:text-[#98AFC7] line-clamp-3">
+                      {cert.summary}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="mx-5 mb-5 pt-3 border-t border-[#DCE3EC] dark:border-[#1F3756] flex items-center justify-between gap-2 text-xs font-semibold">
+                  <button
+                    type="button"
+                    onClick={() => onSelectCertification(cert)}
+                    className="inline-flex items-center gap-1.5 text-[#E63C36] dark:text-[#FF746E] hover:text-[#C92D28] dark:hover:text-[#FF948F] transition-colors cursor-pointer"
+                  >
+                    <FileText className="h-3.5 w-3.5" />
+                    <span>Inspect Certificate</span>
+                  </button>
+                  {cert.verifyUrl ? (
+                    <a
+                      href={cert.verifyUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 text-[#0B2D4F] dark:text-[#F0F5FA] hover:text-[#E63C36] dark:hover:text-[#FF746E] transition-colors"
+                    >
+                      <span>Verify</span>
+                      <ExternalLink className="h-3 w-3" />
+                    </a>
+                  ) : (
+                    <span className="inline-flex items-center gap-1 text-[#5A6B7E] dark:text-[#98AFC7]">
+                      <Award className="h-3.5 w-3.5 text-[#B89A7A] dark:text-[#DFC5A6]" />
+                      <span>{cert.isBadge ? 'Digital Badge' : 'Certificate'}</span>
+                    </span>
+                  )}
+                </div>
+              </article>
+            ))}
+          </div>
         </div>
       </section>
     </div>

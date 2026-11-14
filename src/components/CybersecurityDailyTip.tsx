@@ -114,12 +114,12 @@ export function CybersecurityDailyTip() {
       aria-labelledby="daily-tip-heading"
       className="mx-auto max-w-7xl px-6 pt-14 pb-2"
     >
-      <div className="rounded-2xl border border-[#DCE3EC] bg-white p-6 sm:p-8 shadow-xs">
+      <div className="rounded-2xl border border-[#DCE3EC] dark:border-[#1F3756] bg-white dark:bg-[#10243E] p-6 sm:p-8 shadow-xs">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
           <div className="space-y-2.5 max-w-3xl">
-            <div className="flex flex-wrap items-center gap-2 text-xs font-medium text-[#5A6B7E]">
-              <ShieldAlert className="h-4 w-4 text-[#E63C36] shrink-0" />
-              <span className="font-semibold text-[#0B2D4F]">
+            <div className="flex flex-wrap items-center gap-2 text-xs font-medium text-[#5A6B7E] dark:text-[#98AFC7]">
+              <ShieldAlert className="h-4 w-4 text-[#E63C36] dark:text-[#FF746E] shrink-0" />
+              <span className="font-semibold text-[#0B2D4F] dark:text-[#F0F5FA]">
                 Cybersecurity Daily Tip
               </span>
               <span aria-hidden="true">·</span>
@@ -133,16 +133,16 @@ export function CybersecurityDailyTip() {
 
             <h2
               id="daily-tip-heading"
-              className="font-display text-xl sm:text-2xl font-bold text-[#0B2D4F]"
+              className="font-display text-xl sm:text-2xl font-bold text-[#0B2D4F] dark:text-[#F0F5FA]"
             >
               {currentTip.title}
             </h2>
 
-            <p className="text-sm sm:text-base leading-relaxed text-[#17212E]">
+            <p className="text-sm sm:text-base leading-relaxed text-[#17212E] dark:text-[#D9E4F0]">
               {currentTip.detail}
             </p>
 
-            <p className="text-xs font-medium text-[#5A6B7E]">
+            <p className="text-xs font-medium text-[#5A6B7E] dark:text-[#98AFC7]">
               Focus: {currentTip.reference}
             </p>
           </div>
@@ -151,11 +151,11 @@ export function CybersecurityDailyTip() {
             <button
               type="button"
               onClick={handleCopyTip}
-              className="inline-flex items-center gap-1.5 rounded-lg border border-[#D8E0EA] bg-[#F6F8FB] px-3.5 py-2.5 text-xs sm:text-sm font-semibold text-[#0B2D4F] hover:bg-[#EEF3F9] transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-[#D8E0EA] dark:border-[#294568] bg-[#F6F8FB] dark:bg-[#0B192C] px-3.5 py-2.5 text-xs sm:text-sm font-semibold text-[#0B2D4F] dark:text-[#F0F5FA] hover:bg-[#EEF3F9] dark:hover:bg-[#162C49] transition-colors whitespace-nowrap shrink-0 cursor-pointer"
             >
               {copied ? (
                 <>
-                  <Check className="h-4 w-4 text-[#2F8F5B]" />
+                  <Check className="h-4 w-4 text-[#2F8F5B] dark:text-[#57D08D]" />
                   <span>Copied</span>
                 </>
               ) : (
@@ -169,7 +169,7 @@ export function CybersecurityDailyTip() {
             <button
               type="button"
               onClick={handleNextRandomTip}
-              className="inline-flex items-center gap-1.5 rounded-lg bg-[#0B2D4F] px-4 py-2.5 text-xs sm:text-sm font-semibold text-white hover:bg-[#14416F] transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+              className="inline-flex items-center gap-1.5 rounded-lg bg-[#0B2D4F] dark:bg-[#194775] px-4 py-2.5 text-xs sm:text-sm font-semibold text-white hover:bg-[#14416F] dark:hover:bg-[#21578D] transition-colors whitespace-nowrap shrink-0 cursor-pointer"
             >
               <Shuffle className="h-4 w-4" />
               <span>Another Tip</span>

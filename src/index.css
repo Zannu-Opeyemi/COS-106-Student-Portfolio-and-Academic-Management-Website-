@@ -1,9 +1,16 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @layer base {
   :root {
     --font-display: "Fraunces", Georgia, "Times New Roman", serif;
     --font-sans: "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
+    color-scheme: light;
+  }
+
+  html.dark {
+    color-scheme: dark;
   }
 
   html {

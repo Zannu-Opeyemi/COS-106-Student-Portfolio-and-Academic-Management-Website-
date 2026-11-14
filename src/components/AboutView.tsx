@@ -1,13 +1,23 @@
 import { Check } from 'lucide-react';
 import { useState } from 'react';
-import { EDUCATION, HOBBIES, PROFILE } from '../data/portfolioData';
+import {
+  CertificationItem,
+  EDUCATION,
+  HOBBIES,
+  PROFILE,
+} from '../data/portfolioData';
+import { CertificationsCatalogue } from './CertificationsCatalogue';
 import { CourseworkCatalogue } from './CourseworkCatalogue';
 import { ScrollProgressBar } from './ScrollProgressBar';
 import { Skills } from './Skills';
 
-export function AboutView() {
+interface AboutViewProps {
+  onSelectCertification: (cert: CertificationItem) => void;
+}
+
+export function AboutView({ onSelectCertification }: AboutViewProps) {
   const [cardLogoError, setCardLogoError] = useState(false);
-  const [tableLogoError, setTableLogoError] = useState(false);
+  const [tableLogoErrors, setTableLogoErrors] = useState<Record<string, boolean>>({});
 
   return (
     <div>
@@ -29,16 +39,16 @@ export function AboutView() {
 
       {/* Educational Background & University Affiliation */}
       <section className="mx-auto max-w-7xl px-6 py-14">
-        <h2 className="font-display text-2xl sm:text-3xl font-bold text-[#0B2D4F] mb-6">
+        <h2 className="font-display text-2xl sm:text-3xl font-bold text-[#0B2D4F] dark:text-[#F0F5FA] mb-6">
           Educational Background
         </h2>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-          <div className="lg:col-span-8 overflow-x-auto rounded-xl border border-[#D8E0EA] bg-white">
+          <div className="lg:col-span-8 overflow-x-auto rounded-xl border border-[#D8E0EA] dark:border-[#1F3756] bg-white dark:bg-[#10243E]">
             <table className="w-full h-full border-collapse text-left">
               <caption className="sr-only">Education summary</caption>
               <thead>
-                <tr className="bg-[#0B2D4F] text-white text-xs font-semibold tracking-wide">
+                <tr className="bg-[#0B2D4F] dark:bg-[#152D4B] text-white text-xs font-semibold tracking-wide">
                   <th scope="col" className="px-5 py-3.5">
                     Institution
                   </th>
@@ -50,28 +60,33 @@ export function AboutView() {
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#D8E0EA] text-sm">
+              <tbody className="divide-y divide-[#D8E0EA] dark:divide-[#1F3756] text-sm">
                 {EDUCATION.map((item) => (
                   <tr
                     key={item.institution}
-                    className="hover:bg-[#F6F8FB] transition-colors"
+                    className="hover:bg-[#F6F8FB] dark:hover:bg-[#162C49] transition-colors"
                   >
-                    <td className="px-5 py-4 font-semibold text-[#0B2D4F]">
+                    <td className="px-5 py-4 font-semibold text-[#0B2D4F] dark:text-[#F0F5FA]">
                       <div className="flex flex-col gap-2">
-                        {item.logoUrl && !tableLogoError && (
+                        {item.logoUrl && !tableLogoErrors[item.institution] && (
                           <img
                             src={item.logoUrl}
                             alt={`${item.institution} logo`}
                             referrerPolicy="no-referrer"
-                            onError={() => setTableLogoError(true)}
-                            className="h-7 w-auto self-start object-contain"
+                            onError={() =>
+                              setTableLogoErrors((prev) => ({
+                                ...prev,
+                                [item.institution]: true,
+                              }))
+                            }
+                            className="h-7 w-auto self-start object-contain dark:rounded dark:bg-white dark:px-1.5 dark:py-0.5"
                           />
                         )}
                         <span>{item.institution}</span>
                       </div>
                     </td>
-                    <td className="px-5 py-4 text-[#17212E]">{item.programme}</td>
-                    <td className="px-5 py-4 font-medium text-[#5A6B7E]">
+                    <td className="px-5 py-4 text-[#17212E] dark:text-[#D9E4F0]">{item.programme}</td>
+                    <td className="px-5 py-4 font-medium text-[#5A6B7E] dark:text-[#98AFC7]">
                       {item.status}
                     </td>
                   </tr>
@@ -80,7 +95,7 @@ export function AboutView() {
             </table>
           </div>
 
-          <aside className="lg:col-span-4 rounded-xl bg-[#0B2D4F] text-white border border-[#0B2D4F] p-6 flex flex-col justify-between gap-5">
+          <aside className="lg:col-span-4 rounded-xl bg-[#0B2D4F] text-white border border-[#0B2D4F] dark:border-[#1F3756] p-6 flex flex-col justify-between gap-5">
             {!cardLogoError ? (
               <div className="flex items-center justify-center rounded-lg overflow-hidden bg-[#0B2D4F]">
                 <img
@@ -105,14 +120,14 @@ export function AboutView() {
       </section>
 
       {/* Career Aspirations, Hobbies & Integrated Skills Component */}
-      <section className="bg-white border-t border-[#DCE3EC]">
+      <section className="bg-white dark:bg-[#0D1E34] border-t border-[#DCE3EC] dark:border-[#1F3756]">
         <div className="mx-auto max-w-7xl px-6 py-14 grid grid-cols-1 lg:grid-cols-12 gap-12">
           <div className="lg:col-span-5 space-y-10">
             <article>
-              <h2 className="font-display text-2xl font-bold text-[#0B2D4F]">
+              <h2 className="font-display text-2xl font-bold text-[#0B2D4F] dark:text-[#F0F5FA]">
                 Career Aspirations
               </h2>
-              <p className="mt-3 text-base leading-relaxed text-[#17212E]">
+              <p className="mt-3 text-base leading-relaxed text-[#17212E] dark:text-[#D9E4F0]">
                 I want to build a career in cybersecurity as a security analyst,
                 working in threat intelligence and digital forensics. My goal is to
                 help organisations detect attacks early, investigate incidents
@@ -120,17 +135,17 @@ export function AboutView() {
               </p>
             </article>
 
-            <article className="border-t border-[#D8E0EA] pt-8">
-              <h2 className="font-display text-2xl font-bold text-[#0B2D4F]">
+            <article className="border-t border-[#D8E0EA] dark:border-[#1F3756] pt-8">
+              <h2 className="font-display text-2xl font-bold text-[#0B2D4F] dark:text-[#F0F5FA]">
                 Hobbies and Interests
               </h2>
               <ul className="mt-4 space-y-3">
                 {HOBBIES.map((hobby) => (
                   <li
                     key={hobby}
-                    className="flex items-center gap-3 text-sm sm:text-base text-[#17212E]"
+                    className="flex items-center gap-3 text-sm sm:text-base text-[#17212E] dark:text-[#D9E4F0]"
                   >
-                    <span className="flex h-5 w-5 items-center justify-center rounded bg-[#F6F8FB] border border-[#D8E0EA] text-[#E63C36] shrink-0">
+                    <span className="flex h-5 w-5 items-center justify-center rounded bg-[#F6F8FB] dark:bg-[#10243E] border border-[#D8E0EA] dark:border-[#294568] text-[#E63C36] dark:text-[#FF746E] shrink-0">
                       <Check className="h-3.5 w-3.5" />
                     </span>
                     <span>{hobby}</span>
@@ -145,6 +160,8 @@ export function AboutView() {
           </div>
         </div>
       </section>
+
+      <CertificationsCatalogue onSelectCertification={onSelectCertification} />
 
       <CourseworkCatalogue />
     </div>

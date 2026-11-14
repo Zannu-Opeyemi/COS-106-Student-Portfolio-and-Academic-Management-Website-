@@ -47,6 +47,31 @@ export interface MivaCourse {
   status: 'Completed' | 'Enrolled';
 }
 
+export type CertificationCategory =
+  | 'Cybersecurity'
+  | 'Cloud & Microsoft'
+  | 'Systems & Programming'
+  | 'Leadership & Research';
+
+export interface CertificationItem {
+  id: string;
+  title: string;
+  issuer: string;
+  date: string;
+  category: CertificationCategory;
+  credentialId?: string;
+  verifyUrl?: string;
+  documentUrl?: string;
+  secondaryDocumentUrl?: string;
+  secondaryDocumentLabel?: string;
+  previewImage: string;
+  secondaryPreviewImage?: string;
+  isBadge?: boolean;
+  summary: string;
+  highlights: string[];
+  featured?: boolean;
+}
+
 export const PROFILE = {
   name: 'Zannu Opeyemi Emmanuel',
   role: 'Cybersecurity Student at MIVA Open University',
@@ -376,5 +401,480 @@ export const MIVA_COURSES: MivaCourse[] = [
     units: 2,
     requirement: 'CORE',
     status: 'Enrolled',
+  },
+];
+
+export const CERTIFICATIONS: CertificationItem[] = [
+  {
+    id: 'ms-sc100',
+    title: 'Microsoft Certified: Cybersecurity Architect Expert (SC-100)',
+    issuer: 'Digital Skills Nigeria · Microsoft Elevate',
+    date: 'June 30, 2026',
+    category: 'Cybersecurity',
+    previewImage: '/images/certs/ms-sc100.png',
+    documentUrl: '/assets/aistudio/Certidied_cyber_cdab824b.pdf',
+    summary:
+      'Completed expert-level cybersecurity architecture training covering Zero Trust strategy, governance, risk, and compliance (GRC), security operations design, and cloud infrastructure protection.',
+    highlights: [
+      'Zero Trust architecture',
+      'GRC & security posture',
+      'Hybrid cloud security design',
+    ],
+    featured: true,
+  },
+  {
+    id: 'ms-sc200',
+    title: 'Microsoft Certified: Security Operations Analyst Associate (SC-200)',
+    issuer: 'Digital Skills Nigeria · Microsoft Elevate',
+    date: 'June 30, 2026',
+    category: 'Cybersecurity',
+    previewImage: '/images/certs/ms-sc200.png',
+    documentUrl: '/assets/aistudio/micro_certtt_b582cb7f.pdf',
+    summary:
+      'Focused on threat mitigation, incident response, and security monitoring workflows using SIEM/SOAR investigation concepts, endpoint threat detection, and KQL-style query triage.',
+    highlights: [
+      'Threat hunting & triage',
+      'Incident response workflows',
+      'SIEM & endpoint monitoring',
+    ],
+    featured: true,
+  },
+  {
+    id: 'rtl-crtom',
+    title: 'Certified Red Team Operations Management (CRTOM)',
+    issuer: 'Red Team Leaders',
+    date: 'December 27, 2025',
+    category: 'Cybersecurity',
+    credentialId: '91fcaab56937367d',
+    verifyUrl:
+      'https://courses.redteamleaders.com/exam-completion/91fcaab56937367d',
+    documentUrl:
+      '/assets/aistudio/CROTM_OPERATIONS_MANAGER_certified_red_certificate_fedfda9f.pdf',
+    previewImage: '/assets/aistudio/CRTOM_CERTIFICATE_1e185815.jpg',
+    summary:
+      'Passed the assessment covering adversary emulation planning, rules of engagement, operational security, and coordinating red-team engagements to strengthen blue-team detection.',
+    highlights: [
+      'Engagement planning & scoping',
+      'Adversary emulation management',
+      'Detection feedback loops',
+    ],
+    featured: true,
+  },
+  {
+    id: 'future-interns-cert',
+    title: 'Cyber Security Internship — Certificate of Completion',
+    issuer: 'Future Interns',
+    date: 'December 30, 2025',
+    category: 'Cybersecurity',
+    credentialId: 'FIT/DEC25/CS4986',
+    previewImage: '/images/certs/future-interns-cert.png',
+    documentUrl:
+      '/assets/aistudio/ZANNU_OPEYEMI_EMMANUEL_Internship_Certificate_fa0c91dd.pdf',
+    summary:
+      'Completed an intensive 1-month Cybersecurity internship at Future Interns with outstanding performance across applied security tasks, reporting, and defensive analysis.',
+    highlights: [
+      '1-month applied internship',
+      'Security task execution',
+      'ISO 9001 registered programme',
+    ],
+    featured: true,
+  },
+  {
+    id: 'isc2-candidate',
+    title: 'ISC2 Candidate Badge',
+    issuer: 'ISC2',
+    date: 'Active Credential',
+    category: 'Cybersecurity',
+    previewImage: '/assets/aistudio/isc2-candidate_0a9ed573.png',
+    isBadge: true,
+    summary:
+      'Official ISC2 Candidate standing reflecting active progression toward Certified in Cybersecurity (CC) and CISSP pathways while upholding the ISC2 Code of Ethics.',
+    highlights: [
+      'ISC2 Code of Ethics',
+      'Continuing security education',
+      'Global practitioner community',
+    ],
+    featured: true,
+  },
+  {
+    id: 'mckinsey-forward',
+    title: 'McKinsey.org Forward Program Badge',
+    issuer: 'McKinsey & Company (McKinsey.org)',
+    date: 'Program Completion Credential',
+    category: 'Leadership & Research',
+    previewImage: '/assets/aistudio/mckinsey-org-forward-program_58a80727.png',
+    isBadge: true,
+    summary:
+      'Practical leadership and workplace readiness programme building structured problem-solving, adaptable communication, and digital collaboration capabilities.',
+    highlights: [
+      'Structured problem-solving',
+      'Adaptability & resilience',
+      'Clear stakeholder communication',
+    ],
+    featured: true,
+  },
+  {
+    id: 'future-interns-lor',
+    title: 'Cyber Security Internship — Letter of Recommendation',
+    issuer: 'Future Interns',
+    date: 'December 30, 2025',
+    category: 'Cybersecurity',
+    credentialId: 'FIT/DEC25/CS4986',
+    previewImage: '/images/certs/future-interns-lor.png',
+    documentUrl: '/assets/aistudio/ZANNU_OPEYEMI_EMMANUEL_LoR_ec35534a.pdf',
+    summary:
+      'Formal commendation recognising professionalism, strong technical skill, initiative, problem-solving ability, and attention to detail throughout the Cyber Security Intern tenure.',
+    highlights: [
+      'Technical problem-solving',
+      'Attention to detail',
+      'Industry readiness endorsement',
+    ],
+  },
+  {
+    id: 'rtl-ccep',
+    title: 'Certified Cybersecurity Educator Professional (CCEP)',
+    issuer: 'Red Team Leaders',
+    date: 'December 26, 2025',
+    category: 'Cybersecurity',
+    credentialId: '47e175700d1e2ce6',
+    verifyUrl:
+      'https://courses.redteamleaders.com/exam-completion/47e175700d1e2ce6',
+    documentUrl: '/assets/aistudio/CCEP_certified_certificate_22fa736d.pdf',
+    previewImage: '/assets/aistudio/CCEP_CERTIFICATE_24fcb249.jpg',
+    summary:
+      'Completed all requirements and passed the examination validating structured instruction, lab mentoring, and clear communication of technical security concepts.',
+    highlights: [
+      'Security curriculum delivery',
+      'Technical mentorship',
+      'Clear risk communication',
+    ],
+  },
+  {
+    id: 'cisco-i2cs',
+    title: 'Introduction to Cybersecurity & Verified Badge',
+    issuer: 'Cisco Networking Academy',
+    date: 'November 2, 2026',
+    category: 'Cybersecurity',
+    credentialId: 'bfb2367f-2b6a-489b-8a9d-5f0b6bb5c6b1',
+    previewImage: '/images/certs/cisco-i2cs-cert.png',
+    secondaryPreviewImage: '/images/certs/cisco-i2cs-badge.png',
+    documentUrl:
+      '/assets/aistudio/Introduction_to_Cybersecurity_certificate_z-opeyemi6971-miva-edu-ng_bfb2367f-2b6a-489b-8a9d-5f0b6bb5c6b1_4d3a33d4.pdf',
+    secondaryDocumentUrl:
+      '/assets/aistudio/I2CSUpdate20261112-20-rhp24m_2c0e702b.pdf',
+    secondaryDocumentLabel: 'Verified Badge & Proficiency Statement',
+    isBadge: true,
+    summary:
+      'Student-level credential and verified Cisco Networking Academy badge confirming core proficiency in online safety, common cyber threats, vulnerabilities, and organizational defense.',
+    highlights: [
+      'Threats, attacks & vulnerabilities',
+      'Personal & org protection',
+      'Verified Cisco badge record',
+    ],
+  },
+  {
+    id: 'ms-sc900',
+    title:
+      'Microsoft Certified: Security, Compliance, and Identity Fundamentals (SC-900)',
+    issuer: 'Digital Skills Nigeria · Microsoft Elevate',
+    date: 'June 30, 2026',
+    category: 'Cybersecurity',
+    previewImage: '/images/certs/ms-sc900.png',
+    documentUrl: '/assets/aistudio/Microsoft_Certificate_982d09fe.pdf',
+    summary:
+      'Foundational credential covering identity and access management (IAM), Zero Trust principles, Microsoft security capabilities, and compliance governance models.',
+    highlights: [
+      'Identity & access concepts',
+      'Compliance & governance',
+      'Security posture fundamentals',
+    ],
+  },
+  {
+    id: 'ms-career-cyber',
+    title: 'Career Essentials in Cybersecurity',
+    issuer: 'Digital Skills Nigeria · Microsoft Elevate',
+    date: 'June 30, 2026',
+    category: 'Cybersecurity',
+    previewImage: '/images/certs/ms-cyber-essentials.png',
+    documentUrl: '/assets/aistudio/Certificate_career_essentials_30aab41f.pdf',
+    summary:
+      'Covers core cybersecurity terminology, threat awareness, security operations careers, and foundational defensive practices for enterprise environments.',
+    highlights: [
+      'Security awareness fundamentals',
+      'Threat landscape overview',
+      'Defensive analyst workflows',
+    ],
+  },
+  {
+    id: 'imporse-digital-policing',
+    title: 'IMPORSE Cybersecurity Training Programme for Digital Policing 001',
+    issuer: 'Imporse Technologies Ltd. · MTN Nigeria (MTNN IT)',
+    date: 'Awarded with Commendation',
+    category: 'Cybersecurity',
+    credentialId: 'KM-005',
+    previewImage: '/images/certs/imporse-digital-policing.png',
+    documentUrl: '/assets/aistudio/Zannu_Opeyemi_Emmanuel_25a24f69.pdf',
+    summary:
+      'Awarded with commendation for excellence in cybersecurity skills applied to digital policing, cyber-investigation practices, and incident awareness.',
+    highlights: [
+      'Digital policing security skills',
+      'Awarded with commendation',
+      'Joint Imporse & MTNN IT programme',
+    ],
+  },
+  {
+    id: 'imporse-osint',
+    title: 'Open Source and Threat Intelligence (OSINT Tools)',
+    issuer: 'Imporse Technologies',
+    date: 'March 7, 2024',
+    category: 'Cybersecurity',
+    previewImage: '/images/certs/imporse-osint.png',
+    documentUrl:
+      '/assets/aistudio/zannuopeyemi_gmail.com-2024-03-07T03_09_14_7675362f.pdf',
+    summary:
+      'Practical training on open-source intelligence (OSINT) tooling, structured online research workflows, and foundational threat intelligence collection.',
+    highlights: [
+      'Introduction to OSINT tools',
+      'Research & threat intelligence',
+      'Indicator gathering workflows',
+    ],
+  },
+  {
+    id: 'dsci-appsec-hackathon',
+    title: 'Great AppSec Hackathon 2024 — Round 1',
+    issuer: 'DSCI & Cybersecurity Centre of Excellence (CCoE)',
+    date: 'August 9–10, 2024',
+    category: 'Cybersecurity',
+    credentialId: '920c3db9701e',
+    previewImage: '/images/certs/dsci-appsec.jpg',
+    documentUrl: '/assets/aistudio/certificate_a098c6c1.pdf',
+    summary:
+      'Certificate of Participation for competing in Round 1 of the Great AppSec Hackathon 2024 focused on application security challenges and secure software concepts.',
+    highlights: [
+      'Application security challenges',
+      'National-level AppSec event',
+      'DSCI & CCoE Telangana initiative',
+    ],
+  },
+  {
+    id: 'ms-az900',
+    title: 'Microsoft Certified: Azure Fundamentals (AZ-900)',
+    issuer: 'Digital Skills Nigeria · Microsoft Elevate',
+    date: 'June 30, 2026',
+    category: 'Cloud & Microsoft',
+    previewImage: '/images/certs/ms-az900.png',
+    documentUrl: '/assets/aistudio/dsn_micro_cert_1d8a6d8c.pdf',
+    summary:
+      'Validates foundational knowledge of cloud computing models, core Azure architectural components, compute/networking services, and cloud governance.',
+    highlights: [
+      'IaaS, PaaS & SaaS concepts',
+      'Core Azure cloud services',
+      'Cloud pricing & governance',
+    ],
+  },
+  {
+    id: 'ms-ai900',
+    title: 'Microsoft Certified: Azure AI Fundamentals (AI-900)',
+    issuer: 'Digital Skills Nigeria · Microsoft Elevate',
+    date: 'June 30, 2026',
+    category: 'Cloud & Microsoft',
+    previewImage: '/images/certs/ms-ai900.png',
+    documentUrl: '/assets/aistudio/micro_cert_3_b914f37c.pdf',
+    summary:
+      'Covers fundamental machine learning concepts, computer vision, natural language processing workloads, and responsible AI principles on Microsoft Azure.',
+    highlights: [
+      'Machine learning workloads',
+      'NLP & vision fundamentals',
+      'Responsible AI governance',
+    ],
+  },
+  {
+    id: 'ms-ms900',
+    title: 'Microsoft 365 Certified: Fundamentals (MS-900)',
+    issuer: 'Digital Skills Nigeria · Microsoft Elevate',
+    date: 'June 30, 2026',
+    category: 'Cloud & Microsoft',
+    previewImage: '/images/certs/ms-ms900.png',
+    documentUrl: '/assets/aistudio/Certifica_25a442b9.pdf',
+    summary:
+      'Covers cloud productivity architecture, Microsoft 365 collaboration services, endpoint management basics, and enterprise security and licensing models.',
+    highlights: [
+      'Cloud productivity concepts',
+      'M365 security & trust',
+      'Enterprise tenant basics',
+    ],
+  },
+  {
+    id: 'ms-genai-essentials',
+    title: 'Career Essentials in Generative AI',
+    issuer: 'Digital Skills Nigeria · Microsoft Elevate',
+    date: 'June 30, 2026',
+    category: 'Cloud & Microsoft',
+    previewImage: '/images/certs/ms-genai.png',
+    documentUrl:
+      '/assets/aistudio/Certificate_Career_essentials_in_generative_AI_6660782a.pdf',
+    summary:
+      'Introduces generative AI model fundamentals, practical productivity workflows, prompt reasoning, and ethical considerations when adopting AI systems.',
+    highlights: [
+      'Generative AI foundations',
+      'AI ethics & safe usage',
+      'Modern workplace workflows',
+    ],
+  },
+  {
+    id: 'ms-mce',
+    title: 'Microsoft Certified Educator',
+    issuer: 'Digital Skills Nigeria · Microsoft Elevate',
+    date: 'June 30, 2026',
+    category: 'Cloud & Microsoft',
+    previewImage: '/images/certs/ms-mce.png',
+    documentUrl: '/assets/aistudio/Certificate_2959_54_xr604_2975481b.pdf',
+    summary:
+      'Demonstrates technology literacy and the ability to design structured, technology-supported learning activities that build 21st-century collaboration and problem-solving skills.',
+    highlights: [
+      'Digital pedagogy design',
+      'Technology integration',
+      'Structured knowledge transfer',
+    ],
+  },
+  {
+    id: 'rtl-ccpp',
+    title: 'Certified C++ Practitioner Professional (CCPP)',
+    issuer: 'Red Team Leaders',
+    date: 'January 3, 2026',
+    category: 'Systems & Programming',
+    credentialId: '1a08635978b1e439',
+    verifyUrl:
+      'https://courses.redteamleaders.com/exam-completion/1a08635978b1e439',
+    previewImage: '/images/certs/rtl-ccpp.png',
+    documentUrl:
+      '/assets/aistudio/certified_c_certificate__1__898b2222.pdf',
+    summary:
+      'Professional-tier credential verifying applied C++ programming proficiency, memory-aware system logic, and low-level problem solving useful in security engineering.',
+    highlights: [
+      'Applied C++ syntax & OOP',
+      'Memory & systems logic',
+      'Exam-verified proficiency',
+    ],
+  },
+  {
+    id: 'rtl-ccpc',
+    title: 'Certified C++ Practitioner (CCPC)',
+    issuer: 'Red Team Leaders',
+    date: 'January 3, 2026',
+    category: 'Systems & Programming',
+    credentialId: '1a08635978b1e439',
+    verifyUrl:
+      'https://courses.redteamleaders.com/exam-completion/1a08635978b1e439',
+    previewImage: '/images/certs/rtl-ccpc.png',
+    documentUrl: '/assets/aistudio/certified_c_certificate_352bb6f4.pdf',
+    summary:
+      'Foundation practitioner certification in C++ covering core language constructs, control flow, modular functions, and safe data handling.',
+    highlights: [
+      'Core C++ constructs',
+      'Modular code structure',
+      'Systems programming base',
+    ],
+  },
+  {
+    id: 'ibm-itexperience',
+    title: 'ITExperience Orientation 2025',
+    issuer: 'IBM SkillsBuild',
+    date: 'November 28, 2025',
+    category: 'Systems & Programming',
+    credentialId: 'URL-B2E6B99955E7',
+    previewImage: '/images/certs/ibm-itexperience.png',
+    documentUrl: '/assets/aistudio/IBM_COMPLETION_CERTIFICATE_d52197d9.pdf',
+    summary:
+      'IBM SkillsBuild completion credential introducing enterprise IT workflows, technical career pathways, and core technology readiness practices.',
+    highlights: [
+      'Enterprise IT orientation',
+      '1-hour structured module',
+      'IBM SkillsBuild credential',
+    ],
+  },
+  {
+    id: 'imporse-computer-basics',
+    title: 'Computer Basics and System Information',
+    issuer: 'Imporse Technologies',
+    date: 'March 3, 2024',
+    category: 'Systems & Programming',
+    previewImage: '/images/certs/imporse-computer-basics.png',
+    documentUrl:
+      '/assets/aistudio/zannuopeyemi_gmail.com-2024-03-03T18_25_32_95fb7cfc.pdf',
+    summary:
+      'Covers computer architecture, Windows and Linux operating system essentials, structured file management, and foundational command-line operations.',
+    highlights: [
+      'Windows & Linux basics',
+      'Computer architecture',
+      'Command-line & file management',
+    ],
+  },
+  {
+    id: 'aspire-leaders-2026',
+    title: '2026 Aspire Leaders Program',
+    issuer: 'Aspire Institute',
+    date: 'April 2026',
+    category: 'Leadership & Research',
+    previewImage: '/images/certs/aspire-leaders.png',
+    documentUrl: '/assets/aistudio/Aspire-Certificate_1c919fb7.pdf',
+    summary:
+      'Affirms completion of 40 hours of global leadership coursework strengthening critical thinking, professional communication, self-confidence, and positive social impact.',
+    highlights: [
+      '40 hours of coursework',
+      'Critical thinking & communication',
+      'Global leadership cohort',
+    ],
+  },
+  {
+    id: 'powershift-fellowship',
+    title:
+      'Power Shift Africa Fellowship — Civic Education and Active Citizenship',
+    issuer: 'Power Shift Africa Fellowship (Class 2026, Cohort 4)',
+    date: 'January–March 2026',
+    category: 'Leadership & Research',
+    previewImage: '/assets/aistudio/1794651143527_35c1e39a.png',
+    summary:
+      'Graduated from Cohort 4 of the Power Shift Africa Fellowship examining civic responsibility, ethical leadership, and community advocacy.',
+    highlights: [
+      'Class 2026, Cohort 4',
+      'Civic leadership & ethics',
+      'Community engagement',
+    ],
+  },
+  {
+    id: 'giw-writers-2026',
+    title:
+      'GIW Writers Bootcamp 2026 — Building Strong Writing Skills 1.0',
+    issuer: 'GIW Writers LLP',
+    date: 'March 28, 2026',
+    category: 'Leadership & Research',
+    previewImage:
+      '/assets/aistudio/Congratulations_Zannu_O._Emmanuel_d2eb0a62.png',
+    summary:
+      'Rigorous academic and professional writing bootcamp covering research development, structured argumentation, referencing systems, critical analysis, and dissertation-level reporting.',
+    highlights: [
+      'Research & referencing systems',
+      'Critical analytical writing',
+      'Academic & technical reporting',
+    ],
+  },
+  {
+    id: 'maaun-research-2026',
+    title:
+      'International Workshop on Research Methodology, Data Analysis & Publication',
+    issuer: 'Maryam Abacha American University of Nigeria (MAAUN)',
+    date: 'June 30, 2026',
+    category: 'Leadership & Research',
+    credentialId: 'MN0030399',
+    previewImage: '/images/certs/maaun-research.jpg',
+    documentUrl: '/assets/aistudio/Zannu_Opeyemi_Emmanuel__34e4541f.pdf',
+    summary:
+      'Participated in the international academic workshop covering rigorous research design, empirical data analysis workflows, and scholarly publication standards.',
+    highlights: [
+      'Research methodology design',
+      'Data analysis techniques',
+      'Academic publication standards',
+    ],
   },
 ];

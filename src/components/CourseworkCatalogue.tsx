@@ -23,32 +23,32 @@ export function CourseworkCatalogue() {
   return (
     <section
       aria-labelledby="miva-courses-heading"
-      className="bg-white border-t border-[#DCE3EC]"
+      className="bg-white dark:bg-[#0D1E34] border-t border-[#DCE3EC] dark:border-[#1F3756]"
     >
       <div className="mx-auto max-w-7xl px-6 py-14">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
           <div>
             <h2
               id="miva-courses-heading"
-              className="font-display text-2xl sm:text-3xl font-bold text-[#0B2D4F]"
+              className="font-display text-2xl sm:text-3xl font-bold text-[#0B2D4F] dark:text-[#F0F5FA]"
             >
               MIVA Open University Coursework (100L)
             </h2>
-            <p className="mt-2 max-w-2xl text-sm sm:text-base text-[#5A6B7E]">
+            <p className="mt-2 max-w-2xl text-sm sm:text-base text-[#5A6B7E] dark:text-[#98AFC7]">
               First Semester completed courses and Second Semester modules currently in
               progress.
             </p>
           </div>
 
           <div className="flex flex-wrap items-center gap-4">
-            <p className="text-xs font-semibold text-[#0B2D4F] tabular-nums">
+            <p className="text-xs font-semibold text-[#0B2D4F] dark:text-[#F0F5FA] tabular-nums">
               {visibleCourses.length} courses · {totalUnits} units
             </p>
 
             <div
               role="group"
               aria-label="Filter courses by semester"
-              className="inline-flex flex-wrap items-center gap-1 rounded-xl border border-[#D8E0EA] bg-[#F6F8FB] p-1"
+              className="inline-flex flex-wrap items-center gap-1 rounded-xl border border-[#D8E0EA] dark:border-[#1F3756] bg-[#F6F8FB] dark:bg-[#091526] p-1"
             >
               {SEMESTER_FILTERS.map((item) => {
                 const active = semester === item;
@@ -60,8 +60,8 @@ export function CourseworkCatalogue() {
                     aria-pressed={active}
                     className={`rounded-lg px-3 py-1.5 text-xs font-semibold whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
                       active
-                        ? 'bg-[#0B2D4F] text-white'
-                        : 'text-[#5A6B7E] hover:text-[#0B2D4F]'
+                        ? 'bg-[#0B2D4F] dark:bg-[#194775] text-white'
+                        : 'text-[#5A6B7E] dark:text-[#98AFC7] hover:text-[#0B2D4F] dark:hover:text-white'
                     }`}
                   >
                     {item}
@@ -78,31 +78,31 @@ export function CourseworkCatalogue() {
             return (
               <article
                 key={course.code}
-                className="flex flex-col justify-between rounded-xl border border-[#D8E0EA] bg-[#F6F8FB] p-5"
+                className="flex flex-col justify-between rounded-xl border border-[#D8E0EA] dark:border-[#1F3756] bg-[#F6F8FB] dark:bg-[#10243E] p-5"
               >
                 <div>
-                  <p className="text-xs font-medium text-[#5A6B7E] tabular-nums">
+                  <p className="text-xs font-medium text-[#5A6B7E] dark:text-[#98AFC7] tabular-nums">
                     {course.level} · {course.semester}
                   </p>
-                  <h3 className="font-display mt-1.5 text-base font-bold text-[#0B2D4F] leading-snug">
+                  <h3 className="font-display mt-1.5 text-base font-bold text-[#0B2D4F] dark:text-[#F0F5FA] leading-snug">
                     {course.title}
                   </h3>
-                  <p className="mt-1.5 text-xs font-semibold text-[#17212E] tabular-nums">
+                  <p className="mt-1.5 text-xs font-semibold text-[#17212E] dark:text-[#D9E4F0] tabular-nums">
                     {course.code} · {course.units}{' '}
                     {course.units === 1 ? 'Unit' : 'Units'} · {course.requirement}
                   </p>
                 </div>
 
-                <div className="mt-4 pt-3 border-t border-[#D8E0EA] flex items-center gap-1.5 text-xs font-semibold">
+                <div className="mt-4 pt-3 border-t border-[#D8E0EA] dark:border-[#1F3756] flex items-center gap-1.5 text-xs font-semibold">
                   {isCompleted ? (
                     <>
-                      <CheckCircle2 className="h-3.5 w-3.5 text-[#2F8F5B] shrink-0" />
-                      <span className="text-[#17523A]">Completed</span>
+                      <CheckCircle2 className="h-3.5 w-3.5 text-[#2F8F5B] dark:text-[#57D08D] shrink-0" />
+                      <span className="text-[#17523A] dark:text-[#7FE3AB]">Completed</span>
                     </>
                   ) : (
                     <>
-                      <BookOpen className="h-3.5 w-3.5 text-[#0B2D4F] shrink-0" />
-                      <span className="text-[#0B2D4F]">Enrolled</span>
+                      <BookOpen className="h-3.5 w-3.5 text-[#0B2D4F] dark:text-[#9BC2EA] shrink-0" />
+                      <span className="text-[#0B2D4F] dark:text-[#D9E4F0]">Enrolled</span>
                     </>
                   )}
                 </div>

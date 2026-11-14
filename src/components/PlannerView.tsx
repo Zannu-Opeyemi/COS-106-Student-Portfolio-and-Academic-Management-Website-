@@ -19,7 +19,17 @@ export function PlannerView() {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed)) return parsed;
+        if (Array.isArray(parsed)) {
+          return parsed.filter(
+            (item): item is PlannerTask =>
+              Boolean(item) &&
+              typeof item.id === 'number' &&
+              typeof item.title === 'string' &&
+              typeof item.course === 'string' &&
+              typeof item.due === 'string' &&
+              typeof item.done === 'boolean'
+          );
+        }
       }
     } catch {
       // Fallback to empty task list if storage is unavailable
@@ -115,13 +125,13 @@ export function PlannerView() {
         <form
           onSubmit={handleSubmit}
           noValidate
-          className="rounded-2xl border border-[#D8E0EA] bg-white p-6"
+          className="rounded-2xl border border-[#D8E0EA] dark:border-[#1F3756] bg-white dark:bg-[#10243E] p-6"
         >
           <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-start">
             <div className="md:col-span-5">
               <label
                 htmlFor="task-title"
-                className="block text-sm font-semibold text-[#0B2D4F] mb-1.5"
+                className="block text-sm font-semibold text-[#0B2D4F] dark:text-[#F0F5FA] mb-1.5"
               >
                 Task
               </label>
@@ -137,14 +147,14 @@ export function PlannerView() {
                 placeholder="e.g. Finish COS 106 term project"
                 aria-invalid={Boolean(error)}
                 aria-describedby={error ? 'task-error' : undefined}
-                className={`w-full rounded-lg border px-3.5 py-2.5 text-sm text-[#17212E] bg-white transition-colors focus:outline-none focus:ring-2 ${
+                className={`w-full rounded-lg border px-3.5 py-2.5 text-sm text-[#17212E] dark:text-[#D9E4F0] bg-white dark:bg-[#0B192C] placeholder:text-[#7A8B9E] dark:placeholder:text-[#7891AB] transition-colors focus:outline-none focus:ring-2 ${
                   error
-                    ? 'border-[#B3261E] focus:ring-[#B3261E]/20'
-                    : 'border-[#AAB8C8] focus:border-[#0B2D4F] focus:ring-[#0B2D4F]/15'
+                    ? 'border-[#B3261E] dark:border-[#FF746E] focus:ring-[#B3261E]/20 dark:focus:ring-[#FF746E]/25'
+                    : 'border-[#AAB8C8] dark:border-[#294568] focus:border-[#0B2D4F] dark:focus:border-[#5D8AB8] focus:ring-[#0B2D4F]/15 dark:focus:ring-[#5D8AB8]/25'
                 }`}
               />
               {error && (
-                <p id="task-error" role="alert" className="mt-1.5 text-xs font-medium text-[#B3261E]">
+                <p id="task-error" role="alert" className="mt-1.5 text-xs font-medium text-[#B3261E] dark:text-[#FF9A94]">
                   {error}
                 </p>
               )}
@@ -153,7 +163,7 @@ export function PlannerView() {
             <div className="md:col-span-3">
               <label
                 htmlFor="task-course"
-                className="block text-sm font-semibold text-[#0B2D4F] mb-1.5"
+                className="block text-sm font-semibold text-[#0B2D4F] dark:text-[#F0F5FA] mb-1.5"
               >
                 Course (optional)
               </label>
@@ -163,14 +173,14 @@ export function PlannerView() {
                 value={course}
                 onChange={(e) => setCourse(e.target.value)}
                 placeholder="e.g. COS 106"
-                className="w-full rounded-lg border border-[#AAB8C8] px-3.5 py-2.5 text-sm text-[#17212E] bg-white transition-colors focus:border-[#0B2D4F] focus:outline-none focus:ring-2 focus:ring-[#0B2D4F]/15"
+                className="w-full rounded-lg border border-[#AAB8C8] dark:border-[#294568] px-3.5 py-2.5 text-sm text-[#17212E] dark:text-[#D9E4F0] bg-white dark:bg-[#0B192C] placeholder:text-[#7A8B9E] dark:placeholder:text-[#7891AB] transition-colors focus:border-[#0B2D4F] dark:focus:border-[#5D8AB8] focus:outline-none focus:ring-2 focus:ring-[#0B2D4F]/15 dark:focus:ring-[#5D8AB8]/25"
               />
             </div>
 
             <div className="md:col-span-2">
               <label
                 htmlFor="task-due"
-                className="block text-sm font-semibold text-[#0B2D4F] mb-1.5"
+                className="block text-sm font-semibold text-[#0B2D4F] dark:text-[#F0F5FA] mb-1.5"
               >
                 Due date (optional)
               </label>
@@ -179,7 +189,7 @@ export function PlannerView() {
                 type="date"
                 value={due}
                 onChange={(e) => setDue(e.target.value)}
-                className="w-full rounded-lg border border-[#AAB8C8] px-3.5 py-2.5 text-sm text-[#17212E] bg-white transition-colors focus:border-[#0B2D4F] focus:outline-none focus:ring-2 focus:ring-[#0B2D4F]/15"
+                className="w-full rounded-lg border border-[#AAB8C8] dark:border-[#294568] px-3.5 py-2.5 text-sm text-[#17212E] dark:text-[#D9E4F0] bg-white dark:bg-[#0B192C] transition-colors focus:border-[#0B2D4F] dark:focus:border-[#5D8AB8] focus:outline-none focus:ring-2 focus:ring-[#0B2D4F]/15 dark:focus:ring-[#5D8AB8]/25"
               />
             </div>
 
@@ -199,18 +209,18 @@ export function PlannerView() {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div
             aria-live="polite"
-            className="flex flex-wrap items-center gap-6 text-sm font-semibold text-[#0B2D4F] tabular-nums"
+            className="flex flex-wrap items-center gap-6 text-sm font-semibold text-[#0B2D4F] dark:text-[#F0F5FA] tabular-nums"
           >
             <span>Total: {totalCount}</span>
-            <span className="text-[#2F8F5B]">Completed: {doneCount}</span>
-            <span className="text-[#5A6B7E]">Remaining: {leftCount}</span>
+            <span className="text-[#2F8F5B] dark:text-[#7FE3AB]">Completed: {doneCount}</span>
+            <span className="text-[#5A6B7E] dark:text-[#98AFC7]">Remaining: {leftCount}</span>
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
             <div
               role="group"
               aria-label="Filter tasks"
-              className="inline-flex items-center gap-1 rounded-lg bg-white border border-[#D8E0EA] p-1"
+              className="inline-flex items-center gap-1 rounded-lg bg-white dark:bg-[#10243E] border border-[#D8E0EA] dark:border-[#1F3756] p-1"
             >
               {(['all', 'remaining', 'completed'] as TaskFilter[]).map((item) => (
                 <button
@@ -220,8 +230,8 @@ export function PlannerView() {
                   aria-pressed={filter === item}
                   className={`capitalize rounded-md px-3 py-1 text-xs font-semibold transition-colors cursor-pointer ${
                     filter === item
-                      ? 'bg-[#0B2D4F] text-white'
-                      : 'text-[#5A6B7E] hover:text-[#0B2D4F]'
+                      ? 'bg-[#0B2D4F] dark:bg-[#194775] text-white'
+                      : 'text-[#5A6B7E] dark:text-[#98AFC7] hover:text-[#0B2D4F] dark:hover:text-white'
                   }`}
                 >
                   {item}
@@ -233,7 +243,7 @@ export function PlannerView() {
               <button
                 type="button"
                 onClick={clearCompleted}
-                className="rounded-lg border border-[#D8E0EA] bg-white px-3 py-1.5 text-xs font-semibold text-[#5A6B7E] hover:text-[#B3261E] hover:border-[#B3261E]/40 transition-colors cursor-pointer"
+                className="rounded-lg border border-[#D8E0EA] dark:border-[#294568] bg-white dark:bg-[#10243E] px-3 py-1.5 text-xs font-semibold text-[#5A6B7E] dark:text-[#98AFC7] hover:text-[#B3261E] dark:hover:text-[#FF9A94] hover:border-[#B3261E]/40 dark:hover:border-[#FF9A94]/50 transition-colors cursor-pointer"
               >
                 Clear Completed
               </button>
@@ -243,8 +253,8 @@ export function PlannerView() {
 
         {/* Task List */}
         {visibleTasks.length === 0 ? (
-          <div className="rounded-2xl border border-[#D8E0EA] bg-white px-6 py-10 text-center">
-            <p className="text-sm text-[#5A6B7E]">
+          <div className="rounded-2xl border border-[#D8E0EA] dark:border-[#1F3756] bg-white dark:bg-[#10243E] px-6 py-10 text-center">
+            <p className="text-sm text-[#5A6B7E] dark:text-[#98AFC7]">
               {tasks.length === 0
                 ? 'No tasks yet. Add your first coursework task above.'
                 : `No ${filter} tasks match the current filter.`}
@@ -262,8 +272,10 @@ export function PlannerView() {
               return (
                 <li
                   key={task.id}
-                  className={`flex items-center justify-between gap-4 rounded-xl border border-[#D8E0EA] bg-white px-5 py-4 transition-opacity ${
-                    task.done ? 'opacity-80 bg-[#F6F8FB]' : ''
+                  className={`flex items-center justify-between gap-4 rounded-xl border border-[#D8E0EA] dark:border-[#1F3756] px-5 py-4 transition-opacity ${
+                    task.done
+                      ? 'opacity-80 bg-[#F6F8FB] dark:bg-[#0B192C]'
+                      : 'bg-white dark:bg-[#10243E]'
                   }`}
                 >
                   <div className="flex items-start sm:items-center gap-3.5 min-w-0 flex-1">
@@ -275,26 +287,26 @@ export function PlannerView() {
                           ? `Mark "${task.title}" as remaining`
                           : `Mark "${task.title}" as completed`
                       }
-                      className="mt-0.5 sm:mt-0 text-[#0B2D4F] hover:text-[#E63C36] transition-colors shrink-0 cursor-pointer"
+                      className="mt-0.5 sm:mt-0 text-[#0B2D4F] dark:text-[#F0F5FA] hover:text-[#E63C36] dark:hover:text-[#FF746E] transition-colors shrink-0 cursor-pointer"
                     >
                       {task.done ? (
-                        <CheckCircle2 className="h-5 w-5 text-[#2F8F5B]" />
+                        <CheckCircle2 className="h-5 w-5 text-[#2F8F5B] dark:text-[#7FE3AB]" />
                       ) : (
-                        <Circle className="h-5 w-5 text-[#5A6B7E]" />
+                        <Circle className="h-5 w-5 text-[#5A6B7E] dark:text-[#98AFC7]" />
                       )}
                     </button>
 
                     <div className="min-w-0 flex-1">
                       <p
-                        className={`text-sm sm:text-base font-semibold ${
+                        className={`text-sm sm:text-base font-semibold break-words ${
                           task.done
-                            ? 'line-through text-[#5A6B7E]'
-                            : 'text-[#0B2D4F]'
+                            ? 'line-through text-[#5A6B7E] dark:text-[#98AFC7]'
+                            : 'text-[#0B2D4F] dark:text-[#F0F5FA]'
                         }`}
                       >
                         {task.title}
                       </p>
-                      <p className="mt-0.5 text-xs text-[#5A6B7E] tabular-nums">
+                      <p className="mt-0.5 text-xs text-[#5A6B7E] dark:text-[#98AFC7] tabular-nums">
                         {metaParts.join(' · ')}
                       </p>
                     </div>
@@ -304,7 +316,7 @@ export function PlannerView() {
                     type="button"
                     onClick={() => deleteTask(task.id)}
                     aria-label={`Delete "${task.title}"`}
-                    className="inline-flex items-center gap-1.5 rounded-lg border border-[#D8E0EA] px-3 py-1.5 text-xs font-semibold text-[#B3261E] hover:bg-[#B3261E] hover:text-white hover:border-[#B3261E] transition-colors shrink-0 cursor-pointer"
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-[#D8E0EA] dark:border-[#294568] px-3 py-1.5 text-xs font-semibold text-[#B3261E] dark:text-[#FF9A94] hover:bg-[#B3261E] hover:text-white hover:border-[#B3261E] transition-colors shrink-0 cursor-pointer"
                   >
                     <Trash2 className="h-3.5 w-3.5" />
                     <span>Delete</span>

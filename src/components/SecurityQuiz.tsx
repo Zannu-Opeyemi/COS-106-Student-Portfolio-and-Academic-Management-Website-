@@ -131,58 +131,58 @@ export function SecurityQuiz() {
       className="mx-auto max-w-7xl px-6 py-14"
     >
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        <aside className="lg:col-span-4 rounded-2xl border border-[#DCE3EC] bg-white p-6 sm:p-7 space-y-5">
+        <aside className="lg:col-span-4 rounded-2xl border border-[#DCE3EC] dark:border-[#1F3756] bg-white dark:bg-[#10243E] p-6 sm:p-7 space-y-5">
           <div>
             <h2
               id="security-quiz-panel-heading"
-              className="font-display text-xl font-bold text-[#0B2D4F]"
+              className="font-display text-xl font-bold text-[#0B2D4F] dark:text-[#F0F5FA]"
             >
               Session Summary
             </h2>
-            <p className="mt-1.5 text-sm leading-relaxed text-[#5A6B7E]">
+            <p className="mt-1.5 text-sm leading-relaxed text-[#5A6B7E] dark:text-[#98AFC7]">
               Select the best answer for each scenario. Explanations appear immediately
               after your selection.
             </p>
           </div>
 
-          <div className="border-t border-[#DCE3EC] pt-4 space-y-3 text-sm tabular-nums">
+          <div className="border-t border-[#DCE3EC] dark:border-[#1F3756] pt-4 space-y-3 text-sm tabular-nums">
             <div className="flex items-center justify-between">
-              <span className="text-[#5A6B7E]">Progress</span>
-              <span className="font-semibold text-[#0B2D4F]">
+              <span className="text-[#5A6B7E] dark:text-[#98AFC7]">Progress</span>
+              <span className="font-semibold text-[#0B2D4F] dark:text-[#F0F5FA]">
                 {finished ? QUIZ_QUESTIONS.length : currentIndex + 1} /{' '}
                 {QUIZ_QUESTIONS.length}
               </span>
             </div>
-            <div className="h-2 w-full overflow-hidden rounded-full bg-[#E6ECF3]">
+            <div className="h-2 w-full overflow-hidden rounded-full bg-[#E6ECF3] dark:bg-[#1F3756]">
               <div
-                className="h-full rounded-full bg-[#0B2D4F] transition-all duration-200"
+                className="h-full rounded-full bg-[#0B2D4F] dark:bg-[#5D8AB8] transition-all duration-200"
                 style={{ width: `${finished ? 100 : progressPercent}%` }}
               />
             </div>
             <div className="flex items-center justify-between pt-1">
-              <span className="text-[#5A6B7E]">Current Score</span>
-              <span className="font-semibold text-[#0B2D4F]">
+              <span className="text-[#5A6B7E] dark:text-[#98AFC7]">Current Score</span>
+              <span className="font-semibold text-[#0B2D4F] dark:text-[#F0F5FA]">
                 {score} / {QUIZ_QUESTIONS.length}
               </span>
             </div>
           </div>
 
-          <div className="border-t border-[#DCE3EC] pt-4">
-            <p className="text-xs font-medium text-[#5A6B7E]">
+          <div className="border-t border-[#DCE3EC] dark:border-[#1F3756] pt-4">
+            <p className="text-xs font-medium text-[#5A6B7E] dark:text-[#98AFC7]">
               Topics covered: CIA Triad · SHA-256 Hashing · Honeypots · Least
               Privilege · UTC Timelines
             </p>
           </div>
         </aside>
 
-        <div className="lg:col-span-8 rounded-2xl border border-[#DCE3EC] bg-white p-6 sm:p-8 shadow-xs">
+        <div className="lg:col-span-8 rounded-2xl border border-[#DCE3EC] dark:border-[#1F3756] bg-white dark:bg-[#10243E] p-6 sm:p-8 shadow-xs">
           {finished ? (
             <div className="space-y-5">
-              <p className="text-xs font-semibold text-[#5A6B7E]">Quiz Complete</p>
-              <h3 className="font-display text-2xl sm:text-3xl font-bold text-[#0B2D4F] tabular-nums">
+              <p className="text-xs font-semibold text-[#5A6B7E] dark:text-[#98AFC7]">Quiz Complete</p>
+              <h3 className="font-display text-2xl sm:text-3xl font-bold text-[#0B2D4F] dark:text-[#F0F5FA] tabular-nums">
                 You scored {score} out of {QUIZ_QUESTIONS.length}
               </h3>
-              <p className="text-sm sm:text-base leading-relaxed text-[#17212E]">
+              <p className="text-sm sm:text-base leading-relaxed text-[#17212E] dark:text-[#D9E4F0]">
                 {score === QUIZ_QUESTIONS.length
                   ? 'Full marks. You answered every core principle and forensic workflow question accurately.'
                   : score >= 3
@@ -192,7 +192,7 @@ export function SecurityQuiz() {
               <button
                 type="button"
                 onClick={handleReset}
-                className="inline-flex items-center gap-2 rounded-lg bg-[#0B2D4F] px-5 py-2.5 text-sm font-semibold text-white hover:bg-[#14416F] transition-colors cursor-pointer"
+                className="inline-flex items-center gap-2 rounded-lg bg-[#0B2D4F] dark:bg-[#194775] px-5 py-2.5 text-sm font-semibold text-white hover:bg-[#14416F] dark:hover:bg-[#21578D] transition-colors cursor-pointer"
               >
                 <RotateCcw className="h-4 w-4" />
                 <span>Retake Quiz</span>
@@ -200,16 +200,16 @@ export function SecurityQuiz() {
             </div>
           ) : (
             <div>
-              <div className="flex flex-wrap items-center justify-between gap-2 pb-4 border-b border-[#DCE3EC]">
-                <span className="text-xs font-semibold text-[#5A6B7E]">
+              <div className="flex flex-wrap items-center justify-between gap-2 pb-4 border-b border-[#DCE3EC] dark:border-[#1F3756]">
+                <span className="text-xs font-semibold text-[#5A6B7E] dark:text-[#98AFC7]">
                   {currentQuestion.topic}
                 </span>
-                <span className="text-xs font-semibold text-[#0B2D4F] tabular-nums">
+                <span className="text-xs font-semibold text-[#0B2D4F] dark:text-[#F0F5FA] tabular-nums">
                   Question {currentIndex + 1} of {QUIZ_QUESTIONS.length}
                 </span>
               </div>
 
-              <h3 className="font-display mt-5 text-lg sm:text-xl font-bold text-[#0B2D4F] leading-snug">
+              <h3 className="font-display mt-5 text-lg sm:text-xl font-bold text-[#0B2D4F] dark:text-[#F0F5FA] leading-snug">
                 {currentQuestion.prompt}
               </h3>
 
@@ -223,18 +223,18 @@ export function SecurityQuiz() {
                   const isCorrect = idx === currentQuestion.correctIndex;
 
                   let stateClasses =
-                    'border-[#DCE3EC] bg-[#F6F8FB] text-[#17212E] hover:border-[#0B2D4F] hover:bg-white';
+                    'border-[#DCE3EC] dark:border-[#1F3756] bg-[#F6F8FB] dark:bg-[#0B192C] text-[#17212E] dark:text-[#D9E4F0] hover:border-[#0B2D4F] dark:hover:border-[#5D8AB8] hover:bg-white dark:hover:bg-[#162C49]';
 
                   if (hasAnswered) {
                     if (isCorrect) {
                       stateClasses =
-                        'border-[#2F8F5B] bg-[#E6F4EC] text-[#17523A]';
+                        'border-[#2F8F5B] bg-[#E6F4EC] dark:bg-[#123325] text-[#17523A] dark:text-[#7FE3AB]';
                     } else if (isSelected && !isCorrect) {
                       stateClasses =
-                        'border-[#B3261E] bg-[#FCECEB] text-[#B3261E]';
+                        'border-[#B3261E] bg-[#FCECEB] dark:bg-[#3A1618] text-[#B3261E] dark:text-[#FF9A94]';
                     } else {
                       stateClasses =
-                        'border-[#DCE3EC] bg-[#F6F8FB]/70 text-[#5A6B7E]';
+                        'border-[#DCE3EC] dark:border-[#1F3756] bg-[#F6F8FB]/70 dark:bg-[#0B192C]/60 text-[#5A6B7E] dark:text-[#98AFC7]';
                     }
                   }
 
@@ -251,10 +251,10 @@ export function SecurityQuiz() {
                     >
                       <span>{option}</span>
                       {hasAnswered && isCorrect && (
-                        <CheckCircle2 className="h-4 w-4 shrink-0 text-[#2F8F5B]" />
+                        <CheckCircle2 className="h-4 w-4 shrink-0 text-[#2F8F5B] dark:text-[#7FE3AB]" />
                       )}
                       {hasAnswered && isSelected && !isCorrect && (
-                        <XCircle className="h-4 w-4 shrink-0 text-[#B3261E]" />
+                        <XCircle className="h-4 w-4 shrink-0 text-[#B3261E] dark:text-[#FF9A94]" />
                       )}
                     </button>
                   );
@@ -262,20 +262,20 @@ export function SecurityQuiz() {
               </div>
 
               {hasAnswered && (
-                <div className="mt-5 rounded-xl border border-[#DCE3EC] bg-[#F6F8FB] p-4 space-y-3">
-                  <p className="text-xs font-bold text-[#0B2D4F]">
+                <div className="mt-5 rounded-xl border border-[#DCE3EC] dark:border-[#1F3756] bg-[#F6F8FB] dark:bg-[#0B192C] p-4 space-y-3">
+                  <p className="text-xs font-bold text-[#0B2D4F] dark:text-[#F0F5FA]">
                     {selectedOption === currentQuestion.correctIndex
                       ? 'Correct'
                       : 'Incorrect'}
                   </p>
-                  <p className="text-sm leading-relaxed text-[#17212E]">
+                  <p className="text-sm leading-relaxed text-[#17212E] dark:text-[#D9E4F0]">
                     {currentQuestion.explanation}
                   </p>
                   <div className="pt-1 flex items-center justify-between gap-3">
                     <button
                       type="button"
                       onClick={handleReset}
-                      className="text-xs font-semibold text-[#5A6B7E] hover:text-[#0B2D4F] transition-colors cursor-pointer"
+                      className="text-xs font-semibold text-[#5A6B7E] dark:text-[#98AFC7] hover:text-[#0B2D4F] dark:hover:text-[#F0F5FA] transition-colors cursor-pointer"
                     >
                       Restart Quiz
                     </button>
