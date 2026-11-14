@@ -65,7 +65,9 @@ export interface CertificationItem {
   secondaryDocumentUrl?: string;
   secondaryDocumentLabel?: string;
   previewImage: string;
+  fullImage?: string;
   secondaryPreviewImage?: string;
+  secondaryFullImage?: string;
   isBadge?: boolean;
   summary: string;
   highlights: string[];
@@ -411,7 +413,8 @@ export const CERTIFICATIONS: CertificationItem[] = [
     issuer: 'Digital Skills Nigeria · Microsoft Elevate',
     date: 'June 30, 2026',
     category: 'Cybersecurity',
-    previewImage: '/images/certs/ms-sc100.png',
+    previewImage: '/images/certs/thumbs/ms-sc100.webp',
+    fullImage: '/images/certs/full/ms-sc100.webp',
     documentUrl: '/assets/aistudio/Certidied_cyber_cdab824b.pdf',
     summary:
       'Completed expert-level cybersecurity architecture training covering Zero Trust strategy, governance, risk, and compliance (GRC), security operations design, and cloud infrastructure protection.',
@@ -428,7 +431,8 @@ export const CERTIFICATIONS: CertificationItem[] = [
     issuer: 'Digital Skills Nigeria · Microsoft Elevate',
     date: 'June 30, 2026',
     category: 'Cybersecurity',
-    previewImage: '/images/certs/ms-sc200.png',
+    previewImage: '/images/certs/thumbs/ms-sc200.webp',
+    fullImage: '/images/certs/full/ms-sc200.webp',
     documentUrl: '/assets/aistudio/micro_certtt_b582cb7f.pdf',
     summary:
       'Focused on threat mitigation, incident response, and security monitoring workflows using SIEM/SOAR investigation concepts, endpoint threat detection, and KQL-style query triage.',
@@ -450,7 +454,8 @@ export const CERTIFICATIONS: CertificationItem[] = [
       'https://courses.redteamleaders.com/exam-completion/91fcaab56937367d',
     documentUrl:
       '/assets/aistudio/CROTM_OPERATIONS_MANAGER_certified_red_certificate_fedfda9f.pdf',
-    previewImage: '/assets/aistudio/CRTOM_CERTIFICATE_1e185815.jpg',
+    previewImage: '/images/certs/thumbs/CRTOM_CERTIFICATE_1e185815.webp',
+    fullImage: '/images/certs/full/CRTOM_CERTIFICATE_1e185815.webp',
     summary:
       'Passed the assessment covering adversary emulation planning, rules of engagement, operational security, and coordinating red-team engagements to strengthen blue-team detection.',
     highlights: [
@@ -467,7 +472,8 @@ export const CERTIFICATIONS: CertificationItem[] = [
     date: 'December 30, 2025',
     category: 'Cybersecurity',
     credentialId: 'FIT/DEC25/CS4986',
-    previewImage: '/images/certs/future-interns-cert.png',
+    previewImage: '/images/certs/thumbs/future-interns-cert.webp',
+    fullImage: '/images/certs/full/future-interns-cert.webp',
     documentUrl:
       '/assets/aistudio/ZANNU_OPEYEMI_EMMANUEL_Internship_Certificate_fa0c91dd.pdf',
     summary:
@@ -485,7 +491,8 @@ export const CERTIFICATIONS: CertificationItem[] = [
     issuer: 'ISC2',
     date: 'Active Credential',
     category: 'Cybersecurity',
-    previewImage: '/assets/aistudio/isc2-candidate_0a9ed573.png',
+    previewImage: '/images/certs/thumbs/isc2-candidate_0a9ed573.webp',
+    fullImage: '/images/certs/full/isc2-candidate_0a9ed573.webp',
     isBadge: true,
     summary:
       'Official ISC2 Candidate standing reflecting active progression toward Certified in Cybersecurity (CC) and CISSP pathways while upholding the ISC2 Code of Ethics.',
@@ -502,7 +509,8 @@ export const CERTIFICATIONS: CertificationItem[] = [
     issuer: 'McKinsey & Company (McKinsey.org)',
     date: 'Program Completion Credential',
     category: 'Leadership & Research',
-    previewImage: '/assets/aistudio/mckinsey-org-forward-program_58a80727.png',
+    previewImage: '/images/certs/thumbs/mckinsey-org-forward-program_58a80727.webp',
+    fullImage: '/images/certs/full/mckinsey-org-forward-program_58a80727.webp',
     isBadge: true,
     summary:
       'Practical leadership and workplace readiness programme building structured problem-solving, adaptable communication, and digital collaboration capabilities.',
@@ -520,7 +528,8 @@ export const CERTIFICATIONS: CertificationItem[] = [
     date: 'December 30, 2025',
     category: 'Cybersecurity',
     credentialId: 'FIT/DEC25/CS4986',
-    previewImage: '/images/certs/future-interns-lor.png',
+    previewImage: '/images/certs/thumbs/future-interns-lor.webp',
+    fullImage: '/images/certs/full/future-interns-lor.webp',
     documentUrl: '/assets/aistudio/ZANNU_OPEYEMI_EMMANUEL_LoR_ec35534a.pdf',
     summary:
       'Formal commendation recognising professionalism, strong technical skill, initiative, problem-solving ability, and attention to detail throughout the Cyber Security Intern tenure.',
@@ -540,7 +549,8 @@ export const CERTIFICATIONS: CertificationItem[] = [
     verifyUrl:
       'https://courses.redteamleaders.com/exam-completion/47e175700d1e2ce6',
     documentUrl: '/assets/aistudio/CCEP_certified_certificate_22fa736d.pdf',
-    previewImage: '/assets/aistudio/CCEP_CERTIFICATE_24fcb249.jpg',
+    previewImage: '/images/certs/thumbs/CCEP_CERTIFICATE_24fcb249.webp',
+    fullImage: '/images/certs/full/CCEP_CERTIFICATE_24fcb249.webp',
     summary:
       'Completed all requirements and passed the examination validating structured instruction, lab mentoring, and clear communication of technical security concepts.',
     highlights: [
@@ -556,8 +566,10 @@ export const CERTIFICATIONS: CertificationItem[] = [
     date: 'November 2, 2026',
     category: 'Cybersecurity',
     credentialId: 'bfb2367f-2b6a-489b-8a9d-5f0b6bb5c6b1',
-    previewImage: '/images/certs/cisco-i2cs-cert.png',
-    secondaryPreviewImage: '/images/certs/cisco-i2cs-badge.png',
+    previewImage: '/images/certs/thumbs/cisco-i2cs-cert.webp',
+    fullImage: '/images/certs/full/cisco-i2cs-cert.webp',
+    secondaryPreviewImage: '/images/certs/thumbs/cisco-i2cs-badge.webp',
+    secondaryFullImage: '/images/certs/full/cisco-i2cs-badge.webp',
     documentUrl:
       '/assets/aistudio/Introduction_to_Cybersecurity_certificate_z-opeyemi6971-miva-edu-ng_bfb2367f-2b6a-489b-8a9d-5f0b6bb5c6b1_4d3a33d4.pdf',
     secondaryDocumentUrl:
@@ -579,7 +591,8 @@ export const CERTIFICATIONS: CertificationItem[] = [
     issuer: 'Digital Skills Nigeria · Microsoft Elevate',
     date: 'June 30, 2026',
     category: 'Cybersecurity',
-    previewImage: '/images/certs/ms-sc900.png',
+    previewImage: '/images/certs/thumbs/ms-sc900.webp',
+    fullImage: '/images/certs/full/ms-sc900.webp',
     documentUrl: '/assets/aistudio/Microsoft_Certificate_982d09fe.pdf',
     summary:
       'Foundational credential covering identity and access management (IAM), Zero Trust principles, Microsoft security capabilities, and compliance governance models.',
@@ -595,7 +608,8 @@ export const CERTIFICATIONS: CertificationItem[] = [
     issuer: 'Digital Skills Nigeria · Microsoft Elevate',
     date: 'June 30, 2026',
     category: 'Cybersecurity',
-    previewImage: '/images/certs/ms-cyber-essentials.png',
+    previewImage: '/images/certs/thumbs/ms-cyber-essentials.webp',
+    fullImage: '/images/certs/full/ms-cyber-essentials.webp',
     documentUrl: '/assets/aistudio/Certificate_career_essentials_30aab41f.pdf',
     summary:
       'Covers core cybersecurity terminology, threat awareness, security operations careers, and foundational defensive practices for enterprise environments.',
@@ -612,7 +626,8 @@ export const CERTIFICATIONS: CertificationItem[] = [
     date: 'Awarded with Commendation',
     category: 'Cybersecurity',
     credentialId: 'KM-005',
-    previewImage: '/images/certs/imporse-digital-policing.png',
+    previewImage: '/images/certs/thumbs/imporse-digital-policing.webp',
+    fullImage: '/images/certs/full/imporse-digital-policing.webp',
     documentUrl: '/assets/aistudio/Zannu_Opeyemi_Emmanuel_25a24f69.pdf',
     summary:
       'Awarded with commendation for excellence in cybersecurity skills applied to digital policing, cyber-investigation practices, and incident awareness.',
@@ -628,7 +643,8 @@ export const CERTIFICATIONS: CertificationItem[] = [
     issuer: 'Imporse Technologies',
     date: 'March 7, 2024',
     category: 'Cybersecurity',
-    previewImage: '/images/certs/imporse-osint.png',
+    previewImage: '/images/certs/thumbs/imporse-osint.webp',
+    fullImage: '/images/certs/full/imporse-osint.webp',
     documentUrl:
       '/assets/aistudio/zannuopeyemi_gmail.com-2024-03-07T03_09_14_7675362f.pdf',
     summary:
@@ -646,7 +662,8 @@ export const CERTIFICATIONS: CertificationItem[] = [
     date: 'August 9–10, 2024',
     category: 'Cybersecurity',
     credentialId: '920c3db9701e',
-    previewImage: '/images/certs/dsci-appsec.jpg',
+    previewImage: '/images/certs/thumbs/dsci-appsec.webp',
+    fullImage: '/images/certs/full/dsci-appsec.webp',
     documentUrl: '/assets/aistudio/certificate_a098c6c1.pdf',
     summary:
       'Certificate of Participation for competing in Round 1 of the Great AppSec Hackathon 2024 focused on application security challenges and secure software concepts.',
@@ -662,7 +679,8 @@ export const CERTIFICATIONS: CertificationItem[] = [
     issuer: 'Digital Skills Nigeria · Microsoft Elevate',
     date: 'June 30, 2026',
     category: 'Cloud & Microsoft',
-    previewImage: '/images/certs/ms-az900.png',
+    previewImage: '/images/certs/thumbs/ms-az900.webp',
+    fullImage: '/images/certs/full/ms-az900.webp',
     documentUrl: '/assets/aistudio/dsn_micro_cert_1d8a6d8c.pdf',
     summary:
       'Validates foundational knowledge of cloud computing models, core Azure architectural components, compute/networking services, and cloud governance.',
@@ -678,7 +696,8 @@ export const CERTIFICATIONS: CertificationItem[] = [
     issuer: 'Digital Skills Nigeria · Microsoft Elevate',
     date: 'June 30, 2026',
     category: 'Cloud & Microsoft',
-    previewImage: '/images/certs/ms-ai900.png',
+    previewImage: '/images/certs/thumbs/ms-ai900.webp',
+    fullImage: '/images/certs/full/ms-ai900.webp',
     documentUrl: '/assets/aistudio/micro_cert_3_b914f37c.pdf',
     summary:
       'Covers fundamental machine learning concepts, computer vision, natural language processing workloads, and responsible AI principles on Microsoft Azure.',
@@ -694,7 +713,8 @@ export const CERTIFICATIONS: CertificationItem[] = [
     issuer: 'Digital Skills Nigeria · Microsoft Elevate',
     date: 'June 30, 2026',
     category: 'Cloud & Microsoft',
-    previewImage: '/images/certs/ms-ms900.png',
+    previewImage: '/images/certs/thumbs/ms-ms900.webp',
+    fullImage: '/images/certs/full/ms-ms900.webp',
     documentUrl: '/assets/aistudio/Certifica_25a442b9.pdf',
     summary:
       'Covers cloud productivity architecture, Microsoft 365 collaboration services, endpoint management basics, and enterprise security and licensing models.',
@@ -710,7 +730,8 @@ export const CERTIFICATIONS: CertificationItem[] = [
     issuer: 'Digital Skills Nigeria · Microsoft Elevate',
     date: 'June 30, 2026',
     category: 'Cloud & Microsoft',
-    previewImage: '/images/certs/ms-genai.png',
+    previewImage: '/images/certs/thumbs/ms-genai.webp',
+    fullImage: '/images/certs/full/ms-genai.webp',
     documentUrl:
       '/assets/aistudio/Certificate_Career_essentials_in_generative_AI_6660782a.pdf',
     summary:
@@ -727,7 +748,8 @@ export const CERTIFICATIONS: CertificationItem[] = [
     issuer: 'Digital Skills Nigeria · Microsoft Elevate',
     date: 'June 30, 2026',
     category: 'Cloud & Microsoft',
-    previewImage: '/images/certs/ms-mce.png',
+    previewImage: '/images/certs/thumbs/ms-mce.webp',
+    fullImage: '/images/certs/full/ms-mce.webp',
     documentUrl: '/assets/aistudio/Certificate_2959_54_xr604_2975481b.pdf',
     summary:
       'Demonstrates technology literacy and the ability to design structured, technology-supported learning activities that build 21st-century collaboration and problem-solving skills.',
@@ -746,7 +768,8 @@ export const CERTIFICATIONS: CertificationItem[] = [
     credentialId: '1a08635978b1e439',
     verifyUrl:
       'https://courses.redteamleaders.com/exam-completion/1a08635978b1e439',
-    previewImage: '/images/certs/rtl-ccpp.png',
+    previewImage: '/images/certs/thumbs/rtl-ccpp.webp',
+    fullImage: '/images/certs/full/rtl-ccpp.webp',
     documentUrl:
       '/assets/aistudio/certified_c_certificate__1__898b2222.pdf',
     summary:
@@ -766,7 +789,8 @@ export const CERTIFICATIONS: CertificationItem[] = [
     credentialId: '1a08635978b1e439',
     verifyUrl:
       'https://courses.redteamleaders.com/exam-completion/1a08635978b1e439',
-    previewImage: '/images/certs/rtl-ccpc.png',
+    previewImage: '/images/certs/thumbs/rtl-ccpc.webp',
+    fullImage: '/images/certs/full/rtl-ccpc.webp',
     documentUrl: '/assets/aistudio/certified_c_certificate_352bb6f4.pdf',
     summary:
       'Foundation practitioner certification in C++ covering core language constructs, control flow, modular functions, and safe data handling.',
@@ -783,7 +807,8 @@ export const CERTIFICATIONS: CertificationItem[] = [
     date: 'November 28, 2025',
     category: 'Systems & Programming',
     credentialId: 'URL-B2E6B99955E7',
-    previewImage: '/images/certs/ibm-itexperience.png',
+    previewImage: '/images/certs/thumbs/ibm-itexperience.webp',
+    fullImage: '/images/certs/full/ibm-itexperience.webp',
     documentUrl: '/assets/aistudio/IBM_COMPLETION_CERTIFICATE_d52197d9.pdf',
     summary:
       'IBM SkillsBuild completion credential introducing enterprise IT workflows, technical career pathways, and core technology readiness practices.',
@@ -799,7 +824,8 @@ export const CERTIFICATIONS: CertificationItem[] = [
     issuer: 'Imporse Technologies',
     date: 'March 3, 2024',
     category: 'Systems & Programming',
-    previewImage: '/images/certs/imporse-computer-basics.png',
+    previewImage: '/images/certs/thumbs/imporse-computer-basics.webp',
+    fullImage: '/images/certs/full/imporse-computer-basics.webp',
     documentUrl:
       '/assets/aistudio/zannuopeyemi_gmail.com-2024-03-03T18_25_32_95fb7cfc.pdf',
     summary:
@@ -816,7 +842,8 @@ export const CERTIFICATIONS: CertificationItem[] = [
     issuer: 'Aspire Institute',
     date: 'April 2026',
     category: 'Leadership & Research',
-    previewImage: '/images/certs/aspire-leaders.png',
+    previewImage: '/images/certs/thumbs/aspire-leaders.webp',
+    fullImage: '/images/certs/full/aspire-leaders.webp',
     documentUrl: '/assets/aistudio/Aspire-Certificate_1c919fb7.pdf',
     summary:
       'Affirms completion of 40 hours of global leadership coursework strengthening critical thinking, professional communication, self-confidence, and positive social impact.',
@@ -833,7 +860,8 @@ export const CERTIFICATIONS: CertificationItem[] = [
     issuer: 'Power Shift Africa Fellowship (Class 2026, Cohort 4)',
     date: 'January–March 2026',
     category: 'Leadership & Research',
-    previewImage: '/assets/aistudio/1794651143527_35c1e39a.png',
+    previewImage: '/images/certs/thumbs/1794651143527_35c1e39a.webp',
+    fullImage: '/images/certs/full/1794651143527_35c1e39a.webp',
     summary:
       'Graduated from Cohort 4 of the Power Shift Africa Fellowship examining civic responsibility, ethical leadership, and community advocacy.',
     highlights: [
@@ -850,7 +878,8 @@ export const CERTIFICATIONS: CertificationItem[] = [
     date: 'March 28, 2026',
     category: 'Leadership & Research',
     previewImage:
-      '/assets/aistudio/Congratulations_Zannu_O._Emmanuel_d2eb0a62.png',
+      '/images/certs/thumbs/Congratulations_Zannu_O__Emmanuel_d2eb0a62.webp',
+    fullImage: '/images/certs/full/Congratulations_Zannu_O__Emmanuel_d2eb0a62.webp',
     summary:
       'Rigorous academic and professional writing bootcamp covering research development, structured argumentation, referencing systems, critical analysis, and dissertation-level reporting.',
     highlights: [
@@ -867,7 +896,8 @@ export const CERTIFICATIONS: CertificationItem[] = [
     date: 'June 30, 2026',
     category: 'Leadership & Research',
     credentialId: 'MN0030399',
-    previewImage: '/images/certs/maaun-research.jpg',
+    previewImage: '/images/certs/thumbs/maaun-research.webp',
+    fullImage: '/images/certs/full/maaun-research.webp',
     documentUrl: '/assets/aistudio/Zannu_Opeyemi_Emmanuel__34e4541f.pdf',
     summary:
       'Participated in the international academic workshop covering rigorous research design, empirical data analysis workflows, and scholarly publication standards.',
@@ -878,3 +908,20 @@ export const CERTIFICATIONS: CertificationItem[] = [
     ],
   },
 ];
+
+export const EXECUTIVE_CERT_IDS = new Set<string>([
+  'ms-sc100',
+  'ms-sc200',
+  'rtl-crtom',
+  'future-interns-cert',
+  'future-interns-lor',
+  'rtl-ccep',
+  'cisco-i2cs',
+  'ms-sc900',
+  'ms-az900',
+  'isc2-candidate',
+  'mckinsey-forward',
+  'aspire-leaders-2026',
+  'dsci-appsec-hackathon',
+  'imporse-digital-policing',
+]);

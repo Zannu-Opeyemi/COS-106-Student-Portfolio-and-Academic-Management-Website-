@@ -26,6 +26,7 @@ export function CertificationsCatalogue({
   const [selectedCategory, setSelectedCategory] =
     useState<CategoryFilter>('All');
   const [searchQuery, setSearchQuery] = useState('');
+  const [loadedImages, setLoadedImages] = useState<Record<string, boolean>>({});
   const [failedImages, setFailedImages] = useState<Record<string, boolean>>({});
 
   const badgeCredentials = useMemo(
@@ -118,20 +119,33 @@ export function CertificationsCatalogue({
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {badgeCredentials.map((badge) => {
                 const badgeImg = badge.secondaryPreviewImage ?? badge.previewImage;
+                const badgeFailed = failedImages[`badge-${badge.id}`];
                 return (
                   <button
                     key={badge.id}
                     type="button"
                     onClick={() => onSelectCertification(badge)}
-                    className="group flex items-center gap-4 rounded-xl border border-[#D8E0EA] dark:border-[#1F3756] bg-[#F6F8FB] dark:bg-[#0B192C] p-4 text-left transition-colors hover:border-[#9FB1C8] dark:hover:border-[#3A5A84] hover:bg-white dark:hover:bg-[#162C49] cursor-pointer"
+                    className="group flex items-center gap-4 rounded-xl border border-[#D8E0EA] dark:border-[#1F3756] bg-[#F6F8FB] dark:bg-[#0B192C] p-4 text-left transition-[transform,border-color,background-color,box-shadow] duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-1 hover:border-[#9FB1C8] dark:hover:border-[#4A70A0] hover:bg-white dark:hover:bg-[#162C49] hover:shadow-[0_12px_28px_-10px_rgba(11,45,79,0.18)] dark:hover:shadow-[0_14px_30px_-10px_rgba(0,0,0,0.6)] motion-reduce:transform-none motion-reduce:transition-none cursor-pointer"
                   >
                     <div className="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-[#DCE3EC] dark:border-[#1F3756] bg-white p-1.5">
-                      <img
-                        src={badgeImg}
-                        alt={badge.title}
-                        referrerPolicy="no-referrer"
-                        className="h-full w-full object-contain transition-transform duration-200 group-hover:scale-105 motion-reduce:transform-none"
-                      />
+                      {!badgeFailed ? (
+                        <img
+                          src={badgeImg}
+                          alt={badge.title}
+                          loading="lazy"
+                          decoding="async"
+                          referrerPolicy="no-referrer"
+                          onError={() =>
+                            setFailedImages((prev) => ({
+                              ...prev,
+                              [`badge-${badge.id}`]: true,
+                            }))
+                          }
+                          className="h-full w-full object-contain transition-transform duration-200 group-hover:scale-105 motion-reduce:transform-none"
+                        />
+                      ) : (
+                        <Award className="h-7 w-7 text-[#E63C36]" />
+                      )}
                     </div>
                     <div className="min-w-0">
                       <p className="text-xs font-medium text-[#5A6B7E] dark:text-[#98AFC7]">
@@ -211,8 +225,12 @@ export function CertificationsCatalogue({
               return (
                 <article
                   key={cert.id}
-                  className="group flex flex-col justify-between rounded-2xl border border-[#D8E0EA] dark:border-[#1F3756] bg-white dark:bg-[#10243E] overflow-hidden transition-[transform,border-color,box-shadow] duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-0.5 hover:border-[#9FB1C8] dark:hover:border-[#3A5A84] hover:shadow-md motion-reduce:transform-none motion-reduce:transition-none"
+                  className="group relative flex flex-col justify-between rounded-2xl border border-[#D8E0EA] dark:border-[#1F3756] bg-white dark:bg-[#10243E] overflow-hidden transition-[transform,border-color,box-shadow] duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-1.5 hover:scale-[1.01] hover:border-[#9FB1C8] dark:hover:border-[#4A70A0] hover:shadow-[0_16px_36px_-12px_rgba(11,45,79,0.22)] dark:hover:shadow-[0_18px_40px_-12px_rgba(0,0,0,0.68)] motion-reduce:transform-none motion-reduce:transition-none"
                 >
+                  <span
+                    aria-hidden="true"
+                    className="pointer-events-none absolute inset-x-0 top-0 z-20 h-0.5 bg-[#E63C36] scale-x-0 origin-left transition-transform duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-x-100 motion-reduce:transition-none"
+                  />
                   <div>
                     {/* Certificate / Badge Image Frame */}
                     <button
@@ -221,19 +239,44 @@ export function CertificationsCatalogue({
                       aria-label={`Inspect ${cert.title}`}
                       className="relative flex aspect-[16/10] w-full items-center justify-center overflow-hidden border-b border-[#DCE3EC] dark:border-[#1F3756] bg-[#EEF2F6] dark:bg-white p-3 text-left cursor-pointer"
                     >
+                      {!loadedImages[cert.id] && !imgFailed && (
+                        <div
+                          aria-hidden="true"
+                          className="absolute inset-0 bg-[#DCE3EC] animate-pulse motion-reduce:animate-none"
+                        />
+                      )}
                       {!imgFailed ? (
                         <img
+                          ref={(el) => {
+                            if (
+                              el?.complete &&
+                              el.naturalWidth > 0 &&
+                              !loadedImages[cert.id]
+                            ) {
+                              setLoadedImages((prev) => ({
+                                ...prev,
+                                [cert.id]: true,
+                              }));
+                            }
+                          }}
                           src={cert.previewImage}
                           alt={cert.title}
                           loading="lazy"
+                          decoding="async"
                           referrerPolicy="no-referrer"
+                          onLoad={() =>
+                            setLoadedImages((prev) => ({
+                              ...prev,
+                              [cert.id]: true,
+                            }))
+                          }
                           onError={() =>
                             setFailedImages((prev) => ({
                               ...prev,
                               [cert.id]: true,
                             }))
                           }
-                          className="h-full w-full object-contain transition-transform duration-200 group-hover:scale-[1.03] motion-reduce:transform-none"
+                          className="relative z-10 h-full w-full object-contain transition-transform duration-200 group-hover:scale-[1.03] motion-reduce:transform-none"
                         />
                       ) : (
                         <div className="flex flex-col items-center justify-center text-[#5A6B7E]">
@@ -241,7 +284,7 @@ export function CertificationsCatalogue({
                           <span className="text-xs font-medium">{cert.issuer}</span>
                         </div>
                       )}
-                      <span className="absolute bottom-2.5 right-2.5 inline-flex items-center gap-1 rounded-md bg-[#0B2D4F]/90 px-2 py-1 text-[11px] font-medium text-white opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+                      <span className="absolute bottom-2.5 right-2.5 z-20 inline-flex items-center gap-1 rounded-md bg-[#0B2D4F]/90 px-2 py-1 text-[11px] font-medium text-white opacity-0 translate-y-1 transition-[opacity,transform] duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:opacity-100 group-hover:translate-y-0 motion-reduce:transform-none motion-reduce:transition-none">
                         <Maximize2 className="h-3 w-3" />
                         <span>Inspect</span>
                       </span>

@@ -34,6 +34,11 @@ const QuizView = lazy(() =>
 const ContactView = lazy(() =>
   import('./components/ContactView').then((m) => ({ default: m.ContactView }))
 );
+const ResumePrintView = lazy(() =>
+  import('./components/ResumePrintView').then((m) => ({
+    default: m.ResumePrintView,
+  }))
+);
 
 const PAGE_TITLES: Record<PageId, string> = {
   home: `Home | ${PROFILE.name}`,
@@ -72,6 +77,8 @@ export default function App() {
   const [selectedCertification, setSelectedCertification] =
     useState<CertificationItem | null>(null);
   const [pendingSectionId, setPendingSectionId] = useState<string | null>(null);
+  const [isResumeMode, setIsResumeMode] = useState(false);
+  const [savedScrollY, setSavedScrollY] = useState(0);
   const [theme, setTheme] = useState<ThemeMode>(getInitialTheme);
 
   useEffect(() => {
@@ -93,11 +100,13 @@ export default function App() {
   };
 
   useEffect(() => {
-    document.title = PAGE_TITLES[currentPage];
-  }, [currentPage]);
+    if (!isResumeMode) {
+      document.title = PAGE_TITLES[currentPage];
+    }
+  }, [currentPage, isResumeMode]);
 
   useEffect(() => {
-    if (!pendingSectionId) return;
+    if (!pendingSectionId || isResumeMode) return;
     let attempts = 0;
     const maxAttempts = 60;
     const interval = window.setInterval(() => {
@@ -114,11 +123,12 @@ export default function App() {
     }, 50);
 
     return () => window.clearInterval(interval);
-  }, [currentPage, pendingSectionId]);
+  }, [currentPage, pendingSectionId, isResumeMode]);
 
   const handleNavigate = (page: PageId, sectionId?: string) => {
     setSelectedProject(null);
     setSelectedCertification(null);
+    setIsResumeMode(false);
     setCurrentPage(page);
     if (sectionId) {
       setPendingSectionId(sectionId);
@@ -128,50 +138,83 @@ export default function App() {
     }
   };
 
+  const handleOpenResume = () => {
+    setSavedScrollY(window.scrollY);
+    setSelectedProject(null);
+    setSelectedCertification(null);
+    setIsResumeMode(true);
+  };
+
+  const handleExitResume = () => {
+    setIsResumeMode(false);
+    window.requestAnimationFrame(() => {
+      window.scrollTo({ top: savedScrollY, behavior: 'auto' });
+    });
+  };
+
   return (
-    <div className="min-h-screen flex flex-col bg-[#F6F8FB] dark:bg-[#091526] text-[#17212E] dark:text-[#D9E4F0] transition-colors duration-200 motion-reduce:transition-none">
-      <Navbar
-        currentPage={currentPage}
-        onNavigate={handleNavigate}
-        theme={theme}
-        onToggleTheme={handleToggleTheme}
-      />
-
-      <main className="flex-1">
-        <Suspense fallback={<ViewSkeleton view={currentPage} />}>
-          {currentPage === 'home' && (
-            <HomeView
-              onNavigate={handleNavigate}
-              onSelectProject={setSelectedProject}
-              onSelectCertification={setSelectedCertification}
-            />
-          )}
-          {currentPage === 'about' && (
-            <AboutView onSelectCertification={setSelectedCertification} />
-          )}
-          {currentPage === 'projects' && (
-            <ProjectsView
-              onSelectProject={setSelectedProject}
-              onNavigate={handleNavigate}
-            />
-          )}
-          {currentPage === 'planner' && <PlannerView />}
-          {currentPage === 'quiz' && <QuizView onNavigate={handleNavigate} />}
-          {currentPage === 'contact' && <ContactView />}
+    <>
+      {isResumeMode && (
+        <Suspense fallback={<ViewSkeleton view="about" />}>
+          <ResumePrintView onExit={handleExitResume} />
         </Suspense>
-      </main>
+      )}
 
-      <Footer onNavigate={handleNavigate} />
+      <div
+        className={
+          isResumeMode
+            ? 'hidden print:hidden'
+            : 'min-h-screen flex flex-col bg-[#F6F8FB] dark:bg-[#091526] text-[#17212E] dark:text-[#D9E4F0] transition-colors duration-200 motion-reduce:transition-none'
+        }
+      >
+        <Navbar
+          currentPage={currentPage}
+          onNavigate={handleNavigate}
+          theme={theme}
+          onToggleTheme={handleToggleTheme}
+          onOpenResume={handleOpenResume}
+        />
 
-      <ProjectLightbox
-        project={selectedProject}
-        onClose={() => setSelectedProject(null)}
-      />
+        <main className="flex-1">
+          <Suspense fallback={<ViewSkeleton view={currentPage} />}>
+            {currentPage === 'home' && (
+              <HomeView
+                onNavigate={handleNavigate}
+                onSelectProject={setSelectedProject}
+                onSelectCertification={setSelectedCertification}
+                onOpenResume={handleOpenResume}
+              />
+            )}
+            {currentPage === 'about' && (
+              <AboutView
+                onSelectCertification={setSelectedCertification}
+                onOpenResume={handleOpenResume}
+              />
+            )}
+            {currentPage === 'projects' && (
+              <ProjectsView
+                onSelectProject={setSelectedProject}
+                onNavigate={handleNavigate}
+              />
+            )}
+            {currentPage === 'planner' && <PlannerView />}
+            {currentPage === 'quiz' && <QuizView onNavigate={handleNavigate} />}
+            {currentPage === 'contact' && <ContactView />}
+          </Suspense>
+        </main>
 
-      <CertificationLightbox
-        certification={selectedCertification}
-        onClose={() => setSelectedCertification(null)}
-      />
-    </div>
+        <Footer onNavigate={handleNavigate} onOpenResume={handleOpenResume} />
+
+        <ProjectLightbox
+          project={selectedProject}
+          onClose={() => setSelectedProject(null)}
+        />
+
+        <CertificationLightbox
+          certification={selectedCertification}
+          onClose={() => setSelectedCertification(null)}
+        />
+      </div>
+    </>
   );
 }

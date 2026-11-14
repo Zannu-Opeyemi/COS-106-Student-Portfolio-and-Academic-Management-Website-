@@ -3,6 +3,7 @@ import { PageId, PROFILE } from '../data/portfolioData';
 
 interface FooterProps {
   onNavigate: (page: PageId) => void;
+  onOpenResume: () => void;
 }
 
 const FOOTER_LINKS: { id: PageId; label: string }[] = [
@@ -14,12 +15,12 @@ const FOOTER_LINKS: { id: PageId; label: string }[] = [
   { id: 'contact', label: 'Contact' },
 ];
 
-export function Footer({ onNavigate }: FooterProps) {
+export function Footer({ onNavigate, onOpenResume }: FooterProps) {
   const [logoError, setLogoError] = useState(false);
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-[#0B2D4F] text-[#DBE6F2] border-t border-white/10">
+    <footer className="bg-[#0B2D4F] text-[#DBE6F2] border-t border-white/10 print:hidden">
       <div className="mx-auto max-w-7xl px-6 py-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
         <div className="flex items-center gap-5">
           {!logoError ? (
@@ -53,6 +54,13 @@ export function Footer({ onNavigate }: FooterProps) {
                 {link.label}
               </button>
             ))}
+            <button
+              type="button"
+              onClick={onOpenResume}
+              className="text-[#DFC5A6] hover:text-white font-semibold transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+            >
+              Resume PDF
+            </button>
           </nav>
           <p className="text-xs text-[#BFD0E2] tabular-nums whitespace-nowrap">
             &copy; {currentYear} {PROFILE.name}

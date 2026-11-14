@@ -18,10 +18,16 @@ export function ScrollProgressBar() {
     updateProgress();
     window.addEventListener('scroll', updateProgress, { passive: true });
     window.addEventListener('resize', updateProgress, { passive: true });
+    const resizeObserver =
+      typeof ResizeObserver !== 'undefined'
+        ? new ResizeObserver(updateProgress)
+        : null;
+    resizeObserver?.observe(document.documentElement);
 
     return () => {
       window.removeEventListener('scroll', updateProgress);
       window.removeEventListener('resize', updateProgress);
+      resizeObserver?.disconnect();
     };
   }, []);
 
@@ -29,7 +35,7 @@ export function ScrollProgressBar() {
 
   return (
     <div
-      className="fixed top-0 left-0 right-0 z-50 h-[3px] bg-transparent pointer-events-none"
+      className="fixed top-0 left-0 right-0 z-50 h-[3px] bg-transparent pointer-events-none print:hidden"
       role="progressbar"
       aria-label="Reading progress"
       aria-valuemin={0}

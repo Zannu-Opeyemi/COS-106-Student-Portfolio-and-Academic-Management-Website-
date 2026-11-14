@@ -13,14 +13,13 @@ export function CertificationLightbox({
   certification,
   onClose,
 }: CertificationLightboxProps) {
-  const [imgError, setImgError] = useState(false);
   const [viewMode, setViewMode] = useState<ImageViewMode>('primary');
+  const [loadedSrc, setLoadedSrc] = useState<string | null>(null);
+  const [failedSrcs, setFailedSrcs] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
-    if (!certification) return;
-    setImgError(false);
     setViewMode('primary');
-  }, [certification]);
+  }, [certification?.id]);
 
   useEffect(() => {
     if (!certification) return;
@@ -29,6 +28,7 @@ export function CertificationLightbox({
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
+        setViewMode('primary');
         onClose();
       }
     };
@@ -41,16 +41,34 @@ export function CertificationLightbox({
 
   const handleClose = () => {
     setViewMode('primary');
-    setImgError(false);
     onClose();
   };
 
   if (!certification) return null;
 
-  const activeImageUrl =
-    viewMode === 'secondary' && certification.secondaryPreviewImage
+  const primaryImageUrl = certification.fullImage ?? certification.previewImage;
+  const secondaryImageUrl =
+    certification.secondaryFullImage ?? certification.secondaryPreviewImage;
+
+  const preferredImageUrl =
+    viewMode === 'secondary' && secondaryImageUrl
+      ? secondaryImageUrl
+      : primaryImageUrl;
+
+  const fallbackThumbUrl =
+    viewMode === 'secondary'
       ? certification.secondaryPreviewImage
       : certification.previewImage;
+
+  const activeImageUrl =
+    failedSrcs[preferredImageUrl] &&
+    fallbackThumbUrl &&
+    fallbackThumbUrl !== preferredImageUrl
+      ? fallbackThumbUrl
+      : preferredImageUrl;
+
+  const hasImageFailed = Boolean(failedSrcs[activeImageUrl]);
+  const isImageLoaded = loadedSrc === activeImageUrl;
 
   const activeDocUrl =
     viewMode === 'secondary' && certification.secondaryDocumentUrl
@@ -59,7 +77,7 @@ export function CertificationLightbox({
 
   return (
     <div
-      className="fixed inset-0 z-[60] flex items-center justify-center bg-black/75 p-4 sm:p-6 backdrop-blur-xs"
+      className="fixed inset-0 z-[60] flex items-center justify-center bg-black/75 p-4 sm:p-6 backdrop-blur-xs print:hidden"
       role="dialog"
       aria-modal="true"
       aria-labelledby="cert-lightbox-title"
@@ -107,10 +125,7 @@ export function CertificationLightbox({
               >
                 <button
                   type="button"
-                  onClick={() => {
-                    setImgError(false);
-                    setViewMode('primary');
-                  }}
+                  onClick={() => setViewMode('primary')}
                   className={`rounded-md px-3 py-1 text-xs font-semibold transition-colors cursor-pointer ${
                     viewMode === 'primary'
                       ? 'bg-white text-[#0B2D4F]'
@@ -121,10 +136,7 @@ export function CertificationLightbox({
                 </button>
                 <button
                   type="button"
-                  onClick={() => {
-                    setImgError(false);
-                    setViewMode('secondary');
-                  }}
+                  onClick={() => setViewMode('secondary')}
                   className={`rounded-md px-3 py-1 text-xs font-semibold transition-colors cursor-pointer ${
                     viewMode === 'secondary'
                       ? 'bg-white text-[#0B2D4F]'
@@ -136,14 +148,34 @@ export function CertificationLightbox({
               </div>
             )}
 
-            {!imgError ? (
-              <div className="mx-auto flex items-center justify-center rounded-lg bg-white p-2 sm:p-3">
+            {!hasImageFailed ? (
+              <div className="relative mx-auto flex min-h-[200px] items-center justify-center rounded-lg bg-white p-2 sm:p-3">
+                {!isImageLoaded && (
+                  <div
+                    aria-hidden="true"
+                    className="absolute inset-2 sm:inset-3 rounded bg-[#EEF2F6] animate-pulse motion-reduce:animate-none"
+                  />
+                )}
                 <img
+                  key={activeImageUrl}
+                  ref={(el) => {
+                    if (
+                      el?.complete &&
+                      el.naturalWidth > 0 &&
+                      loadedSrc !== activeImageUrl
+                    ) {
+                      setLoadedSrc(activeImageUrl);
+                    }
+                  }}
                   src={activeImageUrl}
                   alt={certification.title}
+                  decoding="async"
                   referrerPolicy="no-referrer"
-                  onError={() => setImgError(true)}
-                  className="mx-auto max-h-[420px] w-auto max-w-full rounded object-contain"
+                  onLoad={() => setLoadedSrc(activeImageUrl)}
+                  onError={() =>
+                    setFailedSrcs((prev) => ({ ...prev, [activeImageUrl]: true }))
+                  }
+                  className="relative z-10 mx-auto max-h-[420px] w-auto max-w-full rounded object-contain"
                 />
               </div>
             ) : (

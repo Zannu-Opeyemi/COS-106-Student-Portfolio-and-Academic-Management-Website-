@@ -42,6 +42,9 @@ export function ContactView() {
 
   const handleChange = (field: FieldName, nextValue: string) => {
     setValues((prev) => ({ ...prev, [field]: nextValue }));
+    if (statusMessage?.type === 'success') {
+      setStatusMessage(null);
+    }
     if (errors[field]) {
       const nextErr = validateField(field, nextValue);
       setErrors((prev) => ({ ...prev, [field]: nextErr }));

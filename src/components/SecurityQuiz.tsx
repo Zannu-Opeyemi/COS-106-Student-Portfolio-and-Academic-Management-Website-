@@ -242,9 +242,10 @@ export function SecurityQuiz() {
                     <button
                       key={option}
                       type="button"
+                      role="radio"
+                      aria-checked={isSelected}
                       onClick={() => handleSelectOption(idx)}
                       disabled={hasAnswered}
-                      aria-pressed={isSelected}
                       className={`w-full flex items-center justify-between gap-3 rounded-xl border px-4 py-3.5 text-left text-sm font-medium transition-colors ${stateClasses} ${
                         hasAnswered ? 'cursor-default' : 'cursor-pointer'
                       }`}

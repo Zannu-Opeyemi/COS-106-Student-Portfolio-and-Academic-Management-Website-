@@ -1,4 +1,4 @@
-import { Check } from 'lucide-react';
+import { Check, FileDown } from 'lucide-react';
 import { useState } from 'react';
 import {
   CertificationItem,
@@ -13,9 +13,10 @@ import { Skills } from './Skills';
 
 interface AboutViewProps {
   onSelectCertification: (cert: CertificationItem) => void;
+  onOpenResume: () => void;
 }
 
-export function AboutView({ onSelectCertification }: AboutViewProps) {
+export function AboutView({ onSelectCertification, onOpenResume }: AboutViewProps) {
   const [cardLogoError, setCardLogoError] = useState(false);
   const [tableLogoErrors, setTableLogoErrors] = useState<Record<string, boolean>>({});
 
@@ -24,16 +25,27 @@ export function AboutView({ onSelectCertification }: AboutViewProps) {
       <ScrollProgressBar />
       {/* Editorial Page Header */}
       <section className="bg-gradient-to-br from-[#0B2D4F] via-[#0B2D4F] to-[#081F37] text-white">
-        <div className="mx-auto max-w-7xl px-6 py-12 sm:py-16">
-          <p className="text-xs font-semibold tracking-wide text-[#DFC5A6]">
-            Academic Profile · B.Sc. Cybersecurity
-          </p>
-          <h1 className="font-display mt-2 text-3xl sm:text-4xl font-bold text-white text-balance">
-            About Me
-          </h1>
-          <p className="mt-2.5 max-w-2xl text-base text-[#DBE6F2]">
-            Who I am, what I know, and where I am heading in defensive cybersecurity.
-          </p>
+        <div className="mx-auto max-w-7xl px-6 py-12 sm:py-16 flex flex-col md:flex-row md:items-end justify-between gap-6">
+          <div>
+            <p className="text-xs font-semibold tracking-wide text-[#DFC5A6]">
+              Academic Profile · B.Sc. Cybersecurity
+            </p>
+            <h1 className="font-display mt-2 text-3xl sm:text-4xl font-bold text-white text-balance">
+              About Me
+            </h1>
+            <p className="mt-2.5 max-w-2xl text-base text-[#DBE6F2]">
+              Who I am, what I know, and where I am heading in defensive cybersecurity.
+            </p>
+          </div>
+
+          <button
+            type="button"
+            onClick={onOpenResume}
+            className="inline-flex items-center justify-center gap-2 self-start md:self-auto rounded-lg border border-white/30 bg-white/10 px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#E63C36] hover:border-[#E63C36] transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+          >
+            <FileDown className="h-4 w-4 text-[#DFC5A6]" />
+            <span>Resume / Save PDF</span>
+          </button>
         </div>
       </section>
 

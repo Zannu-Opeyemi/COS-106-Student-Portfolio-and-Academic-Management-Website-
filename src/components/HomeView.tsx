@@ -1,4 +1,4 @@
-import { ArrowRight, Award, ExternalLink, FileText, Pause, Play, Shield, Volume2 } from 'lucide-react';
+import { ArrowRight, Award, ExternalLink, FileDown, FileText, Pause, Play, Shield, Volume2 } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   CERTIFICATIONS,
@@ -14,6 +14,7 @@ interface HomeViewProps {
   onNavigate: (page: PageId, sectionId?: string) => void;
   onSelectProject: (project: ProjectItem) => void;
   onSelectCertification: (cert: CertificationItem) => void;
+  onOpenResume: () => void;
 }
 
 const EXPLORE_ITEMS: { num: string; page: PageId; title: string; desc: string }[] = [
@@ -53,12 +54,19 @@ export function HomeView({
   onNavigate,
   onSelectProject,
   onSelectCertification,
+  onOpenResume,
 }: HomeViewProps) {
   const [portraitLoaded, setPortraitLoaded] = useState(false);
   const [portraitError, setPortraitError] = useState(false);
   const [mivaLogoError, setMivaLogoError] = useState(false);
   const [loadedImages, setLoadedImages] = useState<Record<string, boolean>>({});
   const [failedImages, setFailedImages] = useState<Record<string, boolean>>({});
+  const [loadedCertImages, setLoadedCertImages] = useState<
+    Record<string, boolean>
+  >({});
+  const [failedCertImages, setFailedCertImages] = useState<
+    Record<string, boolean>
+  >({});
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const portraitImgRef = useRef<HTMLImageElement | null>(null);
@@ -274,6 +282,14 @@ export function HomeView({
                   className="inline-flex items-center justify-center rounded-lg border border-white/30 bg-white/5 px-6 py-3 text-sm font-semibold text-white whitespace-nowrap shrink-0 transition-colors duration-150 hover:bg-[#14416F] cursor-pointer focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-2"
                 >
                   About &amp; Coursework
+                </button>
+                <button
+                  type="button"
+                  onClick={onOpenResume}
+                  className="inline-flex items-center justify-center gap-2 rounded-lg border border-white/30 bg-white/5 px-5 py-3 text-sm font-semibold text-[#DFC5A6] whitespace-nowrap shrink-0 transition-colors duration-150 hover:bg-[#14416F] hover:text-white cursor-pointer focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-2"
+                >
+                  <FileDown className="h-4 w-4" />
+                  <span>Resume / PDF</span>
                 </button>
               </div>
             </div>
@@ -621,13 +637,51 @@ export function HomeView({
                     aria-label={`Inspect ${cert.title}`}
                     className="relative flex aspect-[16/10] w-full items-center justify-center overflow-hidden border-b border-[#DCE3EC] dark:border-[#1F3756] bg-white p-3 text-left cursor-pointer"
                   >
-                    <img
-                      src={cert.previewImage}
-                      alt={cert.title}
-                      loading="lazy"
-                      referrerPolicy="no-referrer"
-                      className="h-full w-full object-contain transition-transform duration-200 group-hover:scale-[1.03] motion-reduce:transform-none"
-                    />
+                    {!loadedCertImages[cert.id] && !failedCertImages[cert.id] && (
+                      <div
+                        aria-hidden="true"
+                        className="absolute inset-0 bg-[#DCE3EC] animate-pulse motion-reduce:animate-none"
+                      />
+                    )}
+                    {!failedCertImages[cert.id] ? (
+                      <img
+                        ref={(el) => {
+                          if (
+                            el?.complete &&
+                            el.naturalWidth > 0 &&
+                            !loadedCertImages[cert.id]
+                          ) {
+                            setLoadedCertImages((prev) => ({
+                              ...prev,
+                              [cert.id]: true,
+                            }));
+                          }
+                        }}
+                        src={cert.previewImage}
+                        alt={cert.title}
+                        loading="lazy"
+                        decoding="async"
+                        referrerPolicy="no-referrer"
+                        onLoad={() =>
+                          setLoadedCertImages((prev) => ({
+                            ...prev,
+                            [cert.id]: true,
+                          }))
+                        }
+                        onError={() =>
+                          setFailedCertImages((prev) => ({
+                            ...prev,
+                            [cert.id]: true,
+                          }))
+                        }
+                        className="relative z-10 h-full w-full object-contain transition-transform duration-200 group-hover:scale-[1.03] motion-reduce:transform-none"
+                      />
+                    ) : (
+                      <div className="flex flex-col items-center justify-center text-[#5A6B7E]">
+                        <Award className="h-8 w-8 text-[#E63C36] mb-1.5" />
+                        <span className="text-xs font-medium">{cert.issuer}</span>
+                      </div>
+                    )}
                   </button>
 
                   <div className="p-5">

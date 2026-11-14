@@ -1,4 +1,4 @@
-import { Menu, Moon, Sun, X } from 'lucide-react';
+import { FileDown, Menu, Moon, Sun, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { ThemeMode } from '../App';
 import { PageId, PROFILE } from '../data/portfolioData';
@@ -8,6 +8,7 @@ interface NavbarProps {
   onNavigate: (page: PageId) => void;
   theme: ThemeMode;
   onToggleTheme: () => void;
+  onOpenResume: () => void;
 }
 
 const NAV_ITEMS: { id: PageId; label: string }[] = [
@@ -23,6 +24,7 @@ export function Navbar({
   onNavigate,
   theme,
   onToggleTheme,
+  onOpenResume,
 }: NavbarProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [logoError, setLogoError] = useState(false);
@@ -44,13 +46,13 @@ export function Navbar({
   };
 
   return (
-    <header className="sticky top-0 z-40 bg-[#0B2D4F]/98 backdrop-blur-xs text-white border-b border-white/10">
-      <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 sm:gap-4 md:gap-8 px-4 sm:px-6 py-4">
+    <header className="sticky top-0 z-40 bg-[#0B2D4F]/98 backdrop-blur-xs text-white border-b border-white/10 print:hidden">
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 sm:gap-4 lg:gap-8 px-4 sm:px-6 py-4">
         {/* Zone 1: Brand wordmark + MIVA institutional mark */}
         <button
           type="button"
           onClick={() => handleSelect('home')}
-          className="flex min-w-0 flex-1 md:flex-none md:shrink-0 items-center gap-2.5 sm:gap-3 font-display text-sm sm:text-lg font-bold tracking-tight text-white whitespace-nowrap text-left cursor-pointer focus-visible:outline-2 focus-visible:outline-[#E63C36] focus-visible:outline-offset-4 rounded"
+          className="flex min-w-0 flex-1 lg:flex-none lg:shrink-0 items-center gap-2.5 sm:gap-3 font-display text-sm sm:text-lg font-bold tracking-tight text-white whitespace-nowrap text-left cursor-pointer focus-visible:outline-2 focus-visible:outline-[#E63C36] focus-visible:outline-offset-4 rounded"
         >
           {!logoError && (
             <img
@@ -69,7 +71,7 @@ export function Navbar({
         </button>
 
         {/* Zone 2: Concise single-line navigation links */}
-        <nav aria-label="Main navigation" className="hidden md:flex items-center gap-7">
+        <nav aria-label="Main navigation" className="hidden md:flex items-center gap-5 lg:gap-7 shrink-0">
           {NAV_ITEMS.map((item) => {
             const isActive = currentPage === item.id;
             return (
@@ -116,6 +118,17 @@ export function Navbar({
             <span className="hidden lg:inline">
               {theme === 'dark' ? 'Light' : 'Dark'}
             </span>
+          </button>
+
+          <button
+            type="button"
+            onClick={onOpenResume}
+            aria-label="Open print-friendly resume and PDF export"
+            title="Resume / Export PDF"
+            className="hidden md:inline-flex items-center justify-center gap-1.5 rounded-lg border border-white/25 bg-white/5 px-3 py-2 text-xs sm:text-sm font-medium text-white whitespace-nowrap shrink-0 hover:bg-[#14416F] transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-2"
+          >
+            <FileDown className="h-4 w-4 text-[#DFC5A6]" />
+            <span className="hidden lg:inline">Resume PDF</span>
           </button>
 
           <button
@@ -167,6 +180,19 @@ export function Navbar({
                 </li>
               );
             })}
+            <li className="pt-2 mt-1 border-t border-white/10">
+              <button
+                type="button"
+                onClick={() => {
+                  setMobileOpen(false);
+                  onOpenResume();
+                }}
+                className="flex w-full items-center gap-2 rounded-lg bg-white/10 px-3 py-2.5 text-left text-sm font-semibold text-[#DFC5A6] hover:bg-[#14416F] hover:text-white transition-colors cursor-pointer"
+              >
+                <FileDown className="h-4 w-4 shrink-0" />
+                <span>Resume / Save as PDF</span>
+              </button>
+            </li>
           </ul>
         </nav>
       )}

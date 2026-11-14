@@ -29,3 +29,37 @@
 .text-balance {
   text-wrap: balance;
 }
+
+@page {
+  size: A4;
+  margin: 12mm 14mm;
+}
+
+.print-break-inside-avoid {
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+.print-break-after-avoid {
+  break-after: avoid;
+  page-break-after: avoid;
+}
+
+@media print {
+  html,
+  html.dark,
+  body {
+    background: #ffffff !important;
+    color: #17212e !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  audio,
+  button,
+  header,
+  footer,
+  nav {
+    box-shadow: none !important;
+  }
+}
